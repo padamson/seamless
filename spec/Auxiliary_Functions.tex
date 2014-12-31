@@ -1,0 +1,88 @@
+%This is a comment
+\sekshun{Auxiliary Functions}
+\label{Auxiliary_Functions}
+\index{auxiliary functions}
+\index{functions!auxiliary}
+
+ExotiMO relies on several auxiliary functions. This chapter details those functions.
+
+\section{Factorial}
+\index{auxiliary functions!factorial}
+\index{factorial}
+
+\begin{chapelexample}{factorialTest.chpl}
+In the code
+\begin{chapelpre}
+use auxiliary;
+\end{chapelpre}
+\begin{chapel}
+for n in (2, 4, 9) do
+  writeln(factorial(n));
+\end{chapel}
+we use the factorial function to write $2!$, $4!$, and $9!$ out on new lines.
+\begin{chapelpost}
+\end{chapelpost}
+\begin{chapeloutput}
+2
+24
+362880
+\end{chapeloutput}
+\end{chapelexample}
+
+The code that provides the $n!$ function is straightforward:
+\begin{chapelsource}{auxiliary.chpl}
+\begin{chapel}
+proc factorial(n: int): int{
+  if (n <= 1) then return 1;
+  return n*factorial(n-1);
+}
+\end{chapel}
+\end{chapelsource}
+
+\section{Binomial}
+\index{auxiliary functions!binomial function}
+\index{binomial function}
+
+We need a function, \lstinline{binomial}, that computes the binomial coefficient $\binom{m}{n}$.
+\begin{chapelexample}{binomialTest.chpl}
+In the code
+\begin{chapelpre}
+use auxiliary;
+\end{chapelpre}
+\begin{chapel}
+for m in (10, 15, 20) do {
+  for n in (3, 5, 7) do {
+    writeln(binomial(m,n));
+  }
+}
+\end{chapel}
+we use the \lstinline{binomial} function to output $\binom{m}{n}$ 
+for $m\in\{10, 15, 20\}$ and $n \in \{3, 5, 7\}$.
+\begin{chapelpost}
+writeln(a);
+writeln(b);
+\end{chapelpost}
+\begin{chapeloutput}
+120
+252
+120
+455
+3003
+6435
+1140
+15504
+77520
+\end{chapeloutput}
+\end{chapelexample}
+
+The code that provides the \lstinline{binomial} function is straightforward 
+and requires the \lstinline{factorial} function:
+\begin{chapelsource}{auxiliary.chpl}
+\begin{chapel}
+proc binomial(m: int, n: int): int {
+  return factorial(m)/(factorial(n)*factorial(m-n));
+}
+\end{chapel}
+\end{chapelsource}
+
+
