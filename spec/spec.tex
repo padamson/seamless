@@ -117,7 +117,7 @@
 \newcommand{\sekshun}[1]
            {
              \chapter{#1}
-             \markboth{ExotiMO Package Specification}{#1}
+             \markboth{Numerical Integration in Chapel}{#1}
            }
 
 \oddsidemargin 0.0in
@@ -129,13 +129,13 @@
 \textheight 8.5in
 
 \makeindex
-\title{ExotiMO Package Specification\\Version 0.1}
+\title{Numerical Integration in Chapel\\Version 0.1}
 
 \author{Paul Adamson\\
 \\
 }
 
-\date{December 28, 2014}
+\date{January 1, 2015}
 
 \setcounter{tocdepth}{3}
 
@@ -160,7 +160,7 @@
 \cleardoublepage
 
 \pagestyle{myheadings}
-\markboth{ExotiMO Package Specification}{ExotiMO Package Specification}
+\markboth{Numerical Integration in Chapel}{Numerical Integration in Chapel}
 %\pagenumbering{roman}
 
 \ifpdf
@@ -179,8 +179,6 @@
 \part{Introduction}
 \input{Purpose}
 \cleardoublepage
-\input{Acknowledgments}
-\cleardoublepage
 \input{Notation}
 \cleardoublepage
 \input{Organization}
@@ -188,73 +186,15 @@
 \part{Functional (\ie Requirements) Specification}
 \input{Scope}
 \cleardoublepage
-\part{Technical Specification}
-\input{Auxiliary_Functions}
+\input{Functional_Requirements}
 \cleardoublepage
-%\input{Language_Overview}
-%\cleardoublepage
-%\input{Lexical_Structure}
-%\cleardoublepage
-%\input{Types}
-%\cleardoublepage
-%\input{Variables}
-%\cleardoublepage
-%\input{Conversions}
-%\cleardoublepage
-%\input{Expressions}
-%\cleardoublepage
-%\input{Statements}
-%\cleardoublepage
-%\input{Modules}
-%\cleardoublepage
-%\input{Functions}
-%\cleardoublepage
-%\input{Tuples}
-%\cleardoublepage
-%\input{Classes}
-%\cleardoublepage
-%\input{Records}
-%\cleardoublepage
-%\input{Unions}
-%\cleardoublepage
-%\input{Ranges}
-%\cleardoublepage
-%\input{Domains}
-%\cleardoublepage
-%\input{Arrays}
-%\cleardoublepage
-%\input{Iterators}
-%\cleardoublepage
-%\input{Generics}
-%\cleardoublepage
-%\input{Input_and_Output}
-%\cleardoublepage
-%\input{Task_Parallelism_and_Synchronization}
-%\cleardoublepage
-%\input{Data_Parallelism}
-%\cleardoublepage
-%\input{Locales}
-%\cleardoublepage
-%\input{Domain_Maps}
-%\cleardoublepage
-%\input{User_Defined_Reductions_and_Scans}
-%\cleardoublepage
-%\input{User_Defined_Domain_Maps}
-%\cleardoublepage
-%\input{Memory_Consistency}
-%\cleardoublepage
-%\input{Interoperation}
-%\cleardoublepage
-%\input{Standard_Modules}
-%\cleardoublepage
-%\input{Standard_Distributions}
-%\cleardoublepage
-%\input{Standard_Layouts}
-%\cleardoublepage
-%\appendix
-%\input{Syntax}
-%\cleardoublepage
-\markboth{ExotiMO Package Specification}{Index}
+\part{Technical Specification}
+\input{Numerical_Integration}
+\cleardoublepage
+\appendix
+\input{Syntax}
+\cleardoublepage
+\markboth{Numerical Integration in Chapel}{Index}
 \input{spec.ind}
 
 \bibliographystyle{plain}       

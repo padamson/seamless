@@ -21,10 +21,10 @@ usedvi:
 	./collect_syntax.pl # again to show errors
 
 publish:
-	cp spec.pdf ../doc/release/ExotiMOPackageSpec.pdf
+	cp spec.pdf ../doc/release/Spec.pdf
 
 draft:
-	cp spec.pdf ../doc/draft/ExotiMOPackageSpecDraft.pdf
+	cp spec.pdf ../doc/draft/SpecDraft.pdf
 
 clean:
 	rm -f *.aux *.blg *.bbl *.dvi *.log
