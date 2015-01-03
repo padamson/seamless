@@ -1,0 +1,284 @@
+\sekshun{Development Approach}
+\label{Development_Approach}
+\index{development approach}
+
+Before we dive into developing requirements and hacking away at code, a brief description of 
+the \lstinline{seamless} approach to software development, a literate programming approach to 
+test-driven development, is in order.  (Well, as you will see later, the \lstinline{seamless} approach
+is probably better described as a ``quasi-literate programming'' approach, but I will explain
+in due course.)
+
+\section{Test-Driven Development}
+Test-driven development, or TDD, is the notion that developers will improve both the design and
+accuracy of their code by \textit{writing the test} for a particular feature \textit{before writing the 
+code} that implements the feature according to the specification. In other words, the TDD process 
+begins with writing an automated test for code that does not yet 
+exist. After a test is written for a particular feature defined in the specification, the 
+programmer then writes the implementing code to get the test to pass. This process is repeated until
+all features in the specification are implemented. 
+
+The idea is that by writing tests before code, rather than after, the tests will help guide
+the design in small, incremental steps. Over time, this creates a well-factored and robust
+codebase that is easier to modify.
+
+\begin{TODO}
+Consider adding a story about TDD.
+\end{TODO}
+
+\subsection{The Classic TDD Process}\label{tdd-classic}
+
+\begin{TODO} The following process is almost ver batim from Rails 4 Test Prescriptions. Need to 
+cite the work and tailor to technical computing/Chapel code development.
+\end{TODO}
+
+The classic TDD process goes something like this:
+\begin{enumerate}
+\item Create a test. The test should be short and test for one thing in your code. The test
+should run automatically.
+\item Make sure the test fails. Verifying the test failure before you write code helps ensure
+that the test really does what you expect.
+\item Write the simplest code that could possibly make the test pass. Don't worry about good
+code yet. Don't look ahead. Sometimes, write just enough code to clear the current error.
+\item After the test passes, refactor to improve the code. Clean up duplication. Optimize.
+Create new abstractions. Refactoring is a key part of design, so don't skip this. 
+\item Run the tests again to make sure you haven't changed any behavior.
+\end{enumerate}
+
+Repeat the above cycle until your code is complete. This will, in theory, ensure that your code is
+always as simple as possible and completely covered by tests. 
+
+\subsection{TDD Aids Design}
+
+\begin{TODO}
+Describe in more detail how TDD aids design. Draw from Rails Test Prescriptions, pg 5+.
+\end{TODO}
+
+\subsection{Tests as Code Documentation}
+A case can be made in some domains (e.g. web development) that automated test suites 
+provide an alternate means of documenting code--that
+the tests are, in essence, a detailed specification of the code's behavior. This is somewhat true in
+technical computing, but full documentation of scientific and engineering software requires 
+more than just brief comments and example output. Surely, documentation for a function that computes 
+the electron-electron repulsion integral in a quantum chemistry code must have some description
+of the type of electronic wavefunction for which the code is valid!
+
+\section{Literate Programming}
+Enter stage right...literate programming. 
+
+A typical computer program consists of a text file 
+containing program code. Strewn throughout will likely be scant plain text descriptions separated out by 
+``comment delimeters'' that document various aspects of the code.
+Since the actual code itself is presented in a such a way that supports the syntax, ordering, and structure 
+that the programming language (and hence compiler) requires, the code comments will
+be relatively disorganized and disjointed if you are reading them for documentation purposes. 
+The way a code suite is organized in source is generally much different than the way thorough documentation is 
+developed. The plain text nature of the comments also greatly limits their information value.
+
+In literate programming the emphasis is reversed. Instead of writing \textit{a lot of} code that contains 
+\textit{some} plain text documentation, 
+the literate programmer writes \textit{thorough, well-organized, and content-rich} documentation that contains 
+\textit{modular and efficient} code. 
+The result is that the commentary is no longer hidden within a program surrounded by 
+comment delimiters; instead, it is made the main focus. 
+The ``program'' becomes primarily a document directed at humans, with the 
+code interspersed within the documentation, separted out by ``code delimiters'' so that it can be extracted 
+out and processed into source code by literate programming tools. The nature of literate programming is 
+summarized pretty well in a quote from the online documentation for the FunnelWeb literate programming
+preprocessor:
+
+\begin{quote}
+``The effect of this simple shift of emphasis can be so profound as to change one's whole approach to
+programming. Under the literate programming paradigm, the central activity of programming becomes that of 
+conveying meaning to other intelligent beings rather than merely convincing the computer to behave in a 
+particular way. It is the difference between performing and exposing a magic trick.'' 
+\begin{flushright}
+-FunnelWeb Tutorial Manual\cite{funnelweb-what-is-literate-programming}
+\end{flushright}
+\end{quote}
+
+\label{literate-program-requirements}
+The following list of requirements can be used to define a ``literate program:''\cite{childs}
+\begin{enumerate}
+\item The high-level language code and the associated documentation come from the same 
+set of source files.
+\item The documentation and high-level language code for a given aspect of the program should be 
+adjacent to each other when presented to the reader.
+\item The literate program should be subdivided in a logical way.
+\item The program should be presented in an order that is logical from the standpoint of documentation
+rather than to conform to syntactic constraints of the underlying programming language(s).
+\item The documentation should include notes on open issues and future areas for development.
+\item Most importantly, the documentation should include a description of the problem and its solution. 
+This should include all aids such as mathematics and graphics that enhance communication of the problem 
+statement and the understanding of its challenge.
+\item Cross references, indices, and different fonts for text, high-level language keywords, 
+variable names, and literals should be reasonably automatic and obvious in the source and the documentation.
+\item The program is written in small chunks that include the documentation, definitions, and code.
+\end{enumerate}
+
+The documentation portion may be any text that aids the understanding of the problem solved by the code 
+(\eg description of the algorithm that is implemented).  The documentation is often significantly 
+longer than the code itself. Ideally, the problem is described in a way that is agnostic of the language
+in which the code is written.  For example, documentation for code that integrates a function $f(x)$ would
+have discussion of discontinuities, various integration methods available (\eg trapezoidal, Simpson), 
+domain of integration, \etc. 
+In addition to basic shortfalls in documentation and testing in scientific codes, a recent 
+study highlighted the widespread lack of basic context in available documentation.\cite{petre}
+Literate programming solves this problem, ensuring that context is created while the program
+is written.
+
+\section{Literate Programming Approach to Test-Driven Development}
+Test-driven development and literate programming are certainly compatible.  In fact, they are 
+complementary and their combined use is a rare actual example of ``the whole is greater
+than the sum of its parts,'' especially in the context of developing scientific code.  
+In one document, we can clearly outline the problem to be solved, develop a test for the 
+code that we want, and document the code that solves the problem. As this is done in an incremental
+manner, the scientist develops the code that solves the right problem in an efficient and robust manner.
+As will be seen below, the proccess also supports several fundamental aspects of good software
+engineering.
+
+\subsection{A Better TDD Process}\label{tdd-better}
+
+A better TDD process begins first with a ``good'' requirement specification.
+Failing to write a specification is the single biggest unnecessary risk a developer
+can take in a software project, resulting in greatly diminished productivity. 
+For any non-trivial project (more than a few days of coding for one programmer), 
+the lack of a thorough specification will always result in more time and lower quality code.
+Even for trivial examples, a short, informal specification will at least help to ensure
+accuracy of the resulting code.
+
+The specification is the high-level design of the program. 
+Most importantly, it clearly defines the problem that the program will solve. 
+Of almost equal importance is the specification of the
+basic algorithms and outputs of the code. During development of the requirement specification,
+the developer should evaluate available algorithms and consider how data produced from the 
+program will be used.
+Even if a spec is written solely for the benefit of a lone developer, the act of 
+writing the specification---describing how the program works in 
+minute detail---will force design of the program.
+
+Once a specification is in hand, an improved TDD process (section \ref{tdd-classic}) can be 
+undertaken in context of literate programming:
+\begin{enumerate}
+\item Document the problem and its solution.
+  \begin{enumerate}
+  \item Describe a small part of the problem to be solved. The description should include    
+all aids such as mathematics and graphics that enhance communication of the problem 
+statement and the understanding of its challenge. 
+  \item Solve the problem, again using all aids at your disposal (\eg math, graphics).
+  \item Include appropriate references to higher level requirement specifications.
+  \end{enumerate}
+\item Create a test. 
+\begin{enumerate}
+  \item The test should be as short as possible and test for one solution in your overall
+  problem.\footnote{Note here that ``one thing in your code'' is replaced with ``one
+  solution in your overall problem.'' This change emphasizes the literate programming emphasis
+  on documenting the problem and solution before writing code. Writing the test is another
+  form of documenting the solution.}
+  \item The test should run automatically.
+  \item Make sure the test fails. 
+\end{enumerate}
+\item Create the code.
+  \begin{enumerate}
+  \item Write the simplest code possible to pass the test. 
+  \item After the test passes, refactor to improve the code. 
+  \item Run the tests again to make sure the code still passes.
+  \end{enumerate}
+\end{enumerate}
+
+Repeat the above cycle until your code is complete. In theory, the resulting code will 
+have the following characteristics:
+\begin{itemize}
+  \item completely documented
+  \item simple
+  \item readable
+  \item completely covered by tests
+  \item robust
+  \item accurate
+  \item maintainable
+  \item reusable
+\end{itemize}
+
+\subsection{Additional Software Engineering Considerations}
+
+\begin{TODO}
+Insert description of how above approach supports good software engineering (feedback to requirements, \etc).
+\end{TODO}
+
+\section{\texttt{seamless} Package}
+The \lstinline{seamless} package aims to enable a literate programming approach to test-driven
+development of Chapel code. It extends slightly functionality provided in the distribution
+of the Chapel language source for extracting test code from the Chapel language specification.
+The following files are provided in \lstinline{seamless}:
+\begin{description}
+\item[/Makefile] main project Makefile
+\item[/spec] directory containing the \LaTeX\xspace source for this document, including an 
+example of the \lstinline{seamless} approach to developing a numerical integration code in the Chapel language
+\item[/spec/Makefile] the Makefile to build this document
+\item[/spec/spec.tex] the main \LaTeX\xspace file for this document; other \LaTeX\xspace files not 
+listed here are self-explanatory
+\item[/spec/Numerical\_Integration.tex] the chapter of this document that contains the example of a literate
+programming approach to test-driven development of chapel code
+\item[/spec/chapel\_listing.tex] used by the \LaTeX\xspace \lstinline{listing} package to prettyprint Chapel code
+\item[/spec/chapel\_testing.tex] defines environments for adding extra information about
+test code chunks 
+\item[/spec/collect\_syntax.pl] Perl script that collects any syntax definitions and builds the Syntax.tex
+file
+\item[/spec/syntax\_listing.tex] used by the \LaTeX\xspace \lstinline{listing} package to prettyprint Chapel syntax
+\item[/util/extract\_tests] Python script that extracts test code from \LaTeX\xspace source
+\item[/util/extract\_sources] Python script that extracts source code from \LaTeX\xspace source 
+\end{description}
+\begin{TODO}
+combine extract python scripts and update above list
+\end{TODO}
+
+Adapting \lstinline{spec.tex} and the associated \LaTeX\xspace files for a new software project is straightforward. 
+Once you've adapted the structure of the \LaTeX\xspace package in the \lstinline{\spec} directory for your
+purposes, and you've written a decent requirement specification, you're ready to begin the process described in
+Section \ref{tdd-better}. 
+To illustrate the process, we will solve the Rosetta Code numerical integration 
+task\cite{rosetta-code-numerical-integration} in Chapel. As I go through the example, I will highlight
+how to use the \lstinline{seamless} package to execute the literate programming and test-driven development
+approach.
+
+As I stated above, the \lstinline{seamless} approach is ``quasi-literate'' programming.  While the approach
+that I've described meets the intent of the requirements outlined in Section 
+\ref{literate-program-requirements} above, it fails to fully implement one of the two main concepts of
+literate programming.\cite{knuth}
+The first concept, described at length above, is that code should have good documentation with all of the
+supporting mathematics and graphics necessary to convey its function.
+
+The other main concept of literate programming is that the best order to explain the parts of a program 
+is not necessarily going to be the same order that the compiler needs to process the code. 
+For example, you might have
+
+\begin{TODO}
+Replace following example code with Chapel.
+\end{TODO}
+\begin{verbatim}
+unless (open(F, "< $file")) {
+  # 55 lines of error handling here ...        
+}
+$line = <F>;
+\end{verbatim}
+
+When first describing the function of the above block of code, you want to talk focus on opening the file 
+and reading a line. You probably don't want to have to spend a large amount of time discussing the error handling 
+just because the computer language you're using requires that you put the error handling in between the 
+open and the read. You probably prefer to discuss the main logic first, returning to the error-handling 
+part at some later point in the documentation, perhaps in a section of the documentation that covers error-handling
+for the entire software package.
+
+\begin{TODO}
+Reword next three paragraphs and describe how the seamless approach deals with it (presenting evolutions of the
+code and only using the latest one).
+\end{TODO}
+
+%      For the same reason, having the error handling code in the middle there is no just an impediment to you when you try to explain the code, it's also an impediment to another programmer trying to understand the code. One frequent criticism of C is that it's too hard to follow the flow of logic because it is visually dominated by block after block of error handling code.
+
+%      It's sometimes possible to work around this kind of problem by using subroutines or exceptions or some other kind of non-local control flow, but Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you get to write the code in any order you want to. The literate programming system comes with a utility program, usually called tangle, which permutes the code into the right order so that you can compile or execute it.
+
+%      Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting system, but you still have to explain the code in an order that makes sense for the perl interpreter, and not for the person who's trying to understand it.
+
+\begin{TODO}
+A note about theory versus practice for Chapel code development.
+\end{TODO}

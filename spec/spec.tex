@@ -37,8 +37,17 @@
 \usepackage[ps2pdf]{hyperref}
 \fi
 
-\newcommand{\ie}{\emph{i.e.}}
-\newcommand{\eg}{\emph{e.g.}}
+\usepackage{xspace}
+\newcommand*{\eg}{\emph{e.g.}\@\xspace}
+\newcommand*{\ie}{\emph{i.e.}\@\xspace}
+
+\makeatletter
+\newcommand*{\etc}{%
+  \@ifnextchar{.}%
+  {etc}%
+  {etc.\@\xspace}%
+}
+\makeatother
 
 \newenvironment{TODO} {
 \begin{quote}
@@ -177,13 +186,13 @@
 \setlength{\parskip}{4mm plus2mm minus1mm}
 
 \part{Introduction}
-\input{Purpose}
-\cleardoublepage
 \input{Notation}
 \cleardoublepage
 \input{Organization}
 \cleardoublepage
-\part{Functional (\ie Requirements) Specification}
+\input{Development_Approach}
+\cleardoublepage
+\part{Requirements Specification}
 \input{Scope}
 \cleardoublepage
 \input{Functional_Requirements}
