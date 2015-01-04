@@ -9,6 +9,8 @@
 \usepackage{longtable}
 \usepackage[nottoc]{tocbibind}
 \usepackage{multirow}
+\usepackage{wrapfig,booktabs}
+\usepackage{subcaption}
 \input{chapel_testing}
 \input{chapel_listing}
 \input{syntax_listing}
@@ -29,9 +31,9 @@
             bookmarks,
             plainpages=false,
             breaklinks,
-            pdftitle={ExotiMO Package Specification},
+            pdftitle={A Demonstration of the seamless Package},
             pdfauthor={Paul Adamson},
-            pdfsubject={ExotiMO Package}
+            pdfsubject={seamless package, literate programming, test-driven development}
            ]{hyperref}
 \else
 \usepackage[ps2pdf]{hyperref}
@@ -126,7 +128,7 @@
 \newcommand{\sekshun}[1]
            {
              \chapter{#1}
-             \markboth{Numerical Integration in Chapel}{#1}
+             \markboth{A Demonstration of the \texttt{seamless} Package: Numerical Integration in Chapel}{#1}
            }
 
 \oddsidemargin 0.0in
@@ -138,7 +140,7 @@
 \textheight 8.5in
 
 \makeindex
-\title{Numerical Integration in Chapel\\Version 0.1}
+\title{A Demonstration of the \texttt{seamless} Package: Numerical Integration in Chapel\\Version 0.1}
 
 \author{Paul Adamson\\
 \\
@@ -170,6 +172,7 @@
 
 \pagestyle{myheadings}
 \markboth{Numerical Integration in Chapel}{Numerical Integration in Chapel}
+\markboth{A Demonstration of \texttt{seamless}}{A Demonstration of \texttt{seamless}}
 %\pagenumbering{roman}
 
 \ifpdf
@@ -201,9 +204,11 @@
 \input{Numerical_Integration}
 \cleardoublepage
 \appendix
-\input{Syntax}
+\input{Requirement_Traceability}
 \cleardoublepage
-\markboth{Numerical Integration in Chapel}{Index}
+%\input{Syntax}
+%\cleardoublepage
+\markboth{A Demonstration of the \texttt{seamless} Package: Numerical Integration in Chapel}{Index}
 \input{spec.ind}
 
 \bibliographystyle{plain}       

@@ -4,10 +4,10 @@ test: FORCE
 SPECSOURCE_DIR = ./src
 specsources: FORCE
 	rm -rf $(SPECSOURCE_DIR)
-	./util/extract_sources -o $(SPECSOURCE_DIR) spec/*.tex
+	./util/extract_sources -o $(SPECSOURCE_DIR) spec/Numerical_Integration.tex
 
 SPECTEST_DIR = ./test
 spectests: FORCE
 	rm -rf $(SPECTEST_DIR)
-	./util/extract_tests -o $(SPECTEST_DIR) spec/*.tex
+	./util/extract_tests -o $(SPECTEST_DIR) spec/Numerical_Integration.tex
 FORCE:

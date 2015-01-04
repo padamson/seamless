@@ -251,34 +251,36 @@ The other main concept of literate programming is that the best order to explain
 is not necessarily going to be the same order that the compiler needs to process the code. 
 For example, you might have
 
-\begin{TODO}
-Replace following example code with Chapel.
-\end{TODO}
 \begin{verbatim}
-unless (open(F, "< $file")) {
-  # 55 lines of error handling here ...        
+proc readInAtoms(filename:string) {
+  var infile = open(filename, iomode.r);
+  var reader = infile.reader();
+
+  // 55 lines of error handling code
+
+  readNuclei(reader);
+  readBasis(reader);
+
 }
-$line = <F>;
 \end{verbatim}
 
-When first describing the function of the above block of code, you want to talk focus on opening the file 
-and reading a line. You probably don't want to have to spend a large amount of time discussing the error handling 
-just because the computer language you're using requires that you put the error handling in between the 
-open and the read. You probably prefer to discuss the main logic first, returning to the error-handling 
+When first describing the function of the above block of code, the developer wants to focus on a description of 
+opening the file 
+and reading in data, not discussing the error handling just because the computer language requires it to be in 
+between the open and the read. You probably prefer to discuss the main logic first, returning to the error-handling 
 part at some later point in the documentation, perhaps in a section of the documentation that covers error-handling
 for the entire software package.
 
+
+Also, for a collaborator that is reviewing code to understand and perhaps contribute to it, having all of that
+error handling present in the first encounter with the code block is very distracting. It is an impediment to 
+understanding the main purpose of the code.
+
 \begin{TODO}
-Reword next three paragraphs and describe how the seamless approach deals with it (presenting evolutions of the
+Reword next paragraph and describe how the seamless approach deals with it (presenting evolutions of the
 code and only using the latest one).
 \end{TODO}
+Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you get to write the code in any order you want to. The literate programming system comes with a utility program, usually called 
+\lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
+Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting system, but you still have to explain the code in an order that makes sense for the perl interpreter, and not for the person who's trying to understand it.
 
-%      For the same reason, having the error handling code in the middle there is no just an impediment to you when you try to explain the code, it's also an impediment to another programmer trying to understand the code. One frequent criticism of C is that it's too hard to follow the flow of logic because it is visually dominated by block after block of error handling code.
-
-%      It's sometimes possible to work around this kind of problem by using subroutines or exceptions or some other kind of non-local control flow, but Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you get to write the code in any order you want to. The literate programming system comes with a utility program, usually called tangle, which permutes the code into the right order so that you can compile or execute it.
-
-%      Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting system, but you still have to explain the code in an order that makes sense for the perl interpreter, and not for the person who's trying to understand it.
-
-\begin{TODO}
-A note about theory versus practice for Chapel code development.
-\end{TODO}
