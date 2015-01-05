@@ -4,6 +4,9 @@
 # Spec test ignores.
 /test/
 
+# Spec helper ignores.
+/helper/
+
 # Spec ignores.
 /spec/*.bbl
 /spec/*.blg
