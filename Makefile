@@ -1,5 +1,10 @@
 test: FORCE
-	cd test && testexotimo
+	cd test && testseamless
+
+SPECHELPER_DIR= ./helper
+spechelpers: FORCE
+	rm -rf $(SPECHELPER_DIR)
+	./util/extract_helpers -o $(SPECHELPER_DIR) spec/Numerical_Integration.tex
 
 SPECSOURCE_DIR = ./src
 specsources: FORCE

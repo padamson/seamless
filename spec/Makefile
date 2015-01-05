@@ -24,7 +24,7 @@ publish:
 	cp spec.pdf ../doc/release/Spec.pdf
 
 draft:
-	cp spec.pdf ../doc/draft/SpecDraft.pdf
+	cp spec.pdf ../doc/release/SpecDraft.pdf
 
 clean:
 	rm -f *.aux *.blg *.bbl *.dvi *.log

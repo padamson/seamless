@@ -19,16 +19,17 @@ where
 h=(b-a)/N 
 \end{equation}
 
-\begin{wraptable}{r}{6.5cm}
+\begin{table}
+\centering
 \caption{Formula for $x_n$ in Equation \ref{eq:rectangle} of rectangle numerical integration methods.}
 \label{tab:xn-rectangle}
-\begin{tabular}{cc}\\\toprule
-Rectangle Method & $x_n$ \\ \midrule
+\begin{tabular}{cc}\\
+Rectangle Method & $x_n$ \\ \toprule
 left & $a+nh$ \\ \midrule
 right & $a+(n+1)h$ \\ \midrule
 midpoint & $a+\left(n + \frac{1}{2}\right)h$ \\ \bottomrule
 \end{tabular}
-\end{wraptable}
+\end{table}
 
 The formula for $x_n$ for the left, right, and midpoint methods are given in Table \ref{tab:xn-rectangle}.
 As $N$ gets larger, the rectangle method becomes more accurate. This is illustrated in the series of plots
@@ -40,7 +41,8 @@ in Figure \ref{fig:rectangle}.
 \subcaptionbox{$N=6$}{\includegraphics[scale=.6]{fig/rightrectangle-6.eps}}
 \subcaptionbox{$N=10$}{\includegraphics[scale=.6]{fig/rightrectangle-10.eps}}
 \caption{Numerical integration of $f(x) = (2 x-0.5)^3+(1.5 x-1)^2-x+1$ for $x$ in $[0.1,0.8]$
-by the (right) rectangle method for increasing values of $N$. 
+by the (right) rectangle method for increasing values of $N$. The number inside each rectangle is
+the area of that rectangle, and the total area is displayed on each graph.
 The exact value of the integral is 0.70525.}\label{fig:rectangle}
 \end{figure}
 
@@ -50,19 +52,25 @@ for left or right rectangular numerical integration is given by
 E \leq \frac{b-a}{N}\left|f(b)-f(a)\right| \label{eq:lr-rectangle-max-error}
 \end{equation}
 
-Create a helper function to compute the maximum error:
-\begin{chapelexample}{leftRightRectangleIntegrationMaximumError.chpl}
+\begin{enumspec}
+\item\spec{1}
+Using Create a helper function to compute the maximum error: \meetsrequirement{5}
+\end{enumspec}
+
+\begin{chapelhelper}{leftRightRectangleIntegrationMaximumError.chpl}
 \begin{chapel}
 proc leftRightRectangleIntegrationMaximumError(a: real, b: real, N: int, f){
   return ((b-a)/N)*abs(f(b)-f(a));
 }
 \end{chapel}
-\end{chapelexample}
+\end{chapelhelper}
 
+\begin{enumspec}
+\item\spec{2}
 Testing for $f(x) = x^3$, with $a=0$, $b=1$, and $N=100$.
 Since the function is increasing on the interval $[0,1]$, 
-the maximum error given by equation \ref{eq:lr-rectangle-max-error} is 0.01.
-
+the maximum error given by equation \ref{eq:lr-rectangle-max-error} is 0.01.  \meetsrequirement{5.1}
+\end{enumspec}
 
 \begin{chapelexample}{leftRectangleIntegrationTest.chpl}
 A test for \lstinline{leftRectangleIntegration}:
@@ -108,16 +116,6 @@ proc leftRectangleIntegration(a: real(64), b: real(64), N: int(64), f): real(64)
 \end{chapel}
 \end{chapelsource}
 
-\begin{enumerate}
-  \item\label{spec1} First specification. \ref{req2.1.2}
-  \item\label{spec2} Second specification. \ref{req3}
-  \begin{enumerate}
-    \item\label{spec3} Third specification. \ref{req1}
-    \item\label{spec4} Fourth specification. \ref{req1}, \ref{req2.1.1}
-  \end{enumerate}
-  \item\label{spec5} Fifth specification. \ref{req2.1.2}
-\end{enumerate}
-
 For a function $f$ which is twice differentiable, the maximum error $E$ is given by
 the following equation:
 \begin{equation}
@@ -126,11 +124,11 @@ E \leq \frac{(b-a)h^2}{24} f''(\xi) \label{eq:rectangle-max-error}
 for some $\xi$ in $[a,b]$.
 
 Create a helper function to compute the maximum error:
-\begin{chapelexample}{midpointRectangularIntegrationMaximumError.chpl}
+\begin{chapelhelper}{midpointRectangularIntegrationMaximumError.chpl}
 \begin{chapel}
 proc midpointRectangularIntegrationMaximumError(a: real, b: real, N: int, fppxi){
   var h:real = (b-a)/N;
   return ((b-a)*h**2/24) * fppxi;
 }
 \end{chapel}
-\end{chapelexample}
+\end{chapelhelper}

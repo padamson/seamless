@@ -7,13 +7,6 @@ Consider creating a \lstinline{requirements} \LaTeX package to facilitate creati
 lists of requirements and generating a requirement verification matrix...and other requirement enginering processes.
 \end{future}
 
-\makeatletter
-\newcommand{\req}[1]{
-  \textbf{R#1}
-  \def\@currentlabel{R#1}\label{req#1}
-}
-\makeatother
-
 \begin{description}
   \item[\req{1}] The code shall have functions to calculate the definite integral of a function ($f(x)$).
   \item[\req{2}] Available methods of integration shall include:
