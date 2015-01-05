@@ -1,11 +1,10 @@
 \begin{table}[htbp]
 \centering
 \caption{Requirement traceability matrix.}
-\begin{tabular}{|l|l|}
-\hline
-\textbf{Requirement} & Specification   \\ 
-\hline
+\begin{tabular}{cc}
+\textbf{Requirement} & \textbf{Specification}   \\ 
+\toprule
 \xintFor* #1 in \requirements\do {\ref{#1}&\ismetby{#1}\\ 
-  \hline }%
+  \midrule}%
 \end{tabular}
 \end{table}
