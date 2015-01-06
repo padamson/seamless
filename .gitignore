@@ -1,11 +1,24 @@
-# Spec source ignores.
-/src/
-
-# Spec test ignores.
-/test/
-
-# Spec helper ignores.
-/helper/
+# tutorial ignores.
+/tutorial/*.bbl
+/tutorial/*.blg
+/tutorial/*.aux
+/tutorial/*.ind
+/tutorial/*.idx
+/tutorial/*.ilg
+/tutorial/*.log
+/tutorial/*.out
+/tutorial/*.toc
+/tutorial/*.dvi
+/tutorial/*.ps
+/tutorial/*.pdf
+/tutorial/spec_pl.tex
+/tutorial/_chapter_temp.tex
+/tutorial/Syntax.tex
+/tutorial/fig/*converted-to.pdf
+/tutorial/test/
+/tutorial/helper/
+/tutorial/src/
+/tutorial/bin/
 
 # Spec ignores.
 /spec/*.bbl
@@ -23,4 +36,7 @@
 /spec/spec_pl.tex
 /spec/_chapter_temp.tex
 /spec/Syntax.tex
-/spec/fig/*converted-to.pdf
+/spec/test/
+/spec/helper/
+/spec/src/
+/spec/bin/

@@ -1,4 +1,114 @@
-%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{seamless}[2015/01/05 seamless package]
+
+% for requirements traceability
+% thanks to @jfbu (tex.stackexchange.com) for the answer
+% (http://tex.stackexchange.com/questions/220561/automate-generation-of-table-from-data-in-enumerated-lists)
+\RequirePackage{enumitem}
+\RequirePackage{xinttools}
+\RequirePackage{hyperref}
+
+\hypersetup{colorlinks=true}
+
+\newenvironment{enumspec} {
+  \begin{enumerate}[series=spec,resume=spec,label=\textbf{S\arabic*}]%
+{}
+}{%
+\end{enumerate}%
+}
+
+\newcommand{\requirements}{}
+\providecommand*\phantomsection{}
+
+\newcommand{\req}[1]{%
+  \textbf{R#1}%
+    \phantomsection
+    \def\@currentlabel{R#1}%
+    \label{req@#1}%
+    \g@addto@macro\requirements{{req@#1}}%
+    \global\@namedef{req@#1@ismetby}{}%
+}
+
+\newcommand{\meetsrequirement}[1]{%
+  \ref{req@#1}%
+    \expandafter\g@addto@macro\csname req@#1@ismetby\expandafter\endcsname 
+    \expandafter {\expandafter{\@currentspec}}%
+}
+
+\newcommand{\ismetby}[1]%
+{\xintListWithSep{, }{\xintApply { \ref}{\csname #1@ismetby\endcsname }}}
+
+\newcommand{\spec}[1]{\label{spec@#1}\def\@currentspec{spec@#1}}
+
+% TODO environment
+\newenvironment{TODO} {
+\begin{quote}
+{\it TODO:}
+}{
+\end{quote}
+}
+
+% example environment
+\newenvironment{example}{
+\begin{quote}
+{\it Example}.
+}{
+\end{quote}
+}
+
+% source environment 
+\newenvironment{chapelsource}[1]{
+\begin{quote}
+{\it Source (#1)}.
+}{
+\end{quote}
+}
+
+% helper environment
+\newenvironment{chapelhelper}[1]{
+\begin{quote}
+{\it Helper (#1)}.
+}{
+\end{quote}
+}
+
+% example (test) environment
+\newenvironment{chapelexample}[1]{
+\begin{quote}
+{\it Example (#1)}.
+}{
+\end{quote}
+}
+
+\newenvironment{note}{
+\begin{quote}
+{\it Implementors' note}.
+}{
+\end{quote}
+}
+
+\newenvironment{rationale}{
+\begin{quote}
+{\it Rationale}.
+}{
+\end{quote}
+}
+
+\newenvironment{openissue}{
+\begin{quote}
+{\it Open issue}.
+}{
+\end{quote}
+}
+
+\newenvironment{future}{
+\begin{quote}
+{\it Future}.
+}{
+\end{quote}
+}
+
+
 % These are special environments for adding extra information about
 % code snippets which can be later extracted and used to generate test
 % codes for automated testing.
@@ -139,3 +249,5 @@
 %
 %\lstnewenvironment{chapelprintoutput} 
 % (See chapel_listing.tex for the implementation.)
+
+\endinput

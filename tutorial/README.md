@@ -21,8 +21,7 @@ The supplied example TeX package contains the following files:
 * *Makefile*: self-explanatory; supports `pdflatex` and `latex`; does not generate source
 code or test suite (see `Makefile` in root directory for that)
 * *spec.cls*: provides the `spec` LaTeX document class which is a modification of the `book` class
-* *Notation.tex*: describes format and prettyprinting for code and 
-syntax
+* *Notation.tex*: describes format and prettyprinting for code
 * *Purpose.tex*: the purpose of the specification document which is to provide the
 functional specification, technical specification, source code, and test suite (not be 
 confused with the scope of the document, which is to solve the Rosetta Code numerical
@@ -39,9 +38,6 @@ code snippets which can be later extracted and used to generate test codes for a
 During LaTeX compilation, the environments defined in this file throw away all text within the 
 scope of the environment, with the exception of 'chapelprintoutput' which prints the output (and is
 also extracted for testing purposes)
-* *syntax_listing.tex*: used by the LaTeX `listings` package to format syntax
-* *collect_syntax.pl*: Perl script that generates a `Syntax.tex` file (collected lexical and syntax
-productions) which can be included in an Appendix
 * *master.bib*: contains bibliography entries for use by `bibtex`
 
 Adapting the Example Package

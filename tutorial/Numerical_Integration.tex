@@ -1,4 +1,4 @@
-\documentclass[10pt,twoside,titlepage]{spec}
+\documentclass[10pt,twoside,titlepage]{seamless}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{color}
@@ -12,9 +12,9 @@
 \usepackage{wrapfig,booktabs}
 \usepackage{subcaption}
 %\usepackage{cleveref}
-\input{chapel_testing}
+%\input{chapel_testing}
+\usepackage{seamless}
 \input{chapel_listing}
-\input{syntax_listing}
 
 %% High section numbers require different number widths
 \usepackage[titles]{tocloft}
@@ -26,20 +26,21 @@
 \setlength{\cftsubsecindent}{1.3em} % cftchapnumwidth
 \setlength{\cftsubsubsecindent}{4.5em} % cftchapnumwidth + cftsecnumwidth
 
-\usepackage{ifpdf}
-\ifpdf
-\usepackage[pdftex,
-            bookmarks,
-            plainpages=false,
-            breaklinks,
-            pdftitle={Test-Driven Development with seamless},
-            pdfauthor={Paul Adamson},
-            pdfsubject={seamless package, literate programming, test-driven development}
-           ]{hyperref}
-\else
-\usepackage[ps2pdf]{hyperref}
-\fi
+%\usepackage{ifpdf}
+%\ifpdf
+%\usepackage[pdftex,
+            %bookmarks,
+            %plainpages=false,
+            %breaklinks,
+            %pdftitle={Test-Driven Development with seamless},
+            %pdfauthor={Paul Adamson},
+            %pdfsubject={seamless package, literate programming, test-driven development}
+           %]{hyperref}
+%\else
+%\usepackage[ps2pdf]{hyperref}
+%\fi
 
+% some custom latex convenience commands
 \usepackage{xspace}
 \newcommand*{\eg}{\emph{e.g.}\@\xspace}
 \newcommand*{\ie}{\emph{i.e.}\@\xspace}
@@ -51,127 +52,6 @@
   {etc.\@\xspace}%
 }
 \makeatother
-
-% for requirements traceability
-% thanks to @jfbu (tex.stackexchange.com) for the answer
-% (http://tex.stackexchange.com/questions/220561/automate-generation-of-table-from-data-in-enumerated-lists)
-\usepackage{enumitem}
-
-\newenvironment{enumspec} {
-  \begin{enumerate}[series=spec,resume=spec,label=\textbf{S\arabic*}]%
-{}
-}{%
-\end{enumerate}%
-}
-
-\newcommand{\requirements}{}
-\providecommand*\phantomsection{}
-
-\makeatletter
-\newcommand{\req}[1]{%
-  \textbf{R#1}%
-    \phantomsection
-    \def\@currentlabel{R#1}%
-    \label{req@#1}%
-    \g@addto@macro\requirements{{req@#1}}%
-    \global\@namedef{req@#1@ismetby}{}%
-}
-
-\newcommand{\meetsrequirement}[1]{%
-  \ref{req@#1}%
-    \expandafter\g@addto@macro\csname req@#1@ismetby\expandafter\endcsname 
-    \expandafter {\expandafter{\@currentspec}}%
-}
-
-\newcommand{\ismetby}[1]%
-{\xintListWithSep{, }{\xintApply { \ref}{\csname #1@ismetby\endcsname }}}
-
-\newcommand{\spec}[1]{\label{spec@#1}\def\@currentspec{spec@#1}}
-\makeatother
-
-\usepackage{xinttools}
-
-%\usepackage{hyperref}% check if ok with hyperlinks
-%\hypersetup{colorlinks=true}
-
-
-% environments to set apart TODO's, etc.
-\newenvironment{TODO} {
-\begin{quote}
-{\it TODO:}
-}{
-\end{quote}
-}
-
-\newenvironment{example}{
-\begin{quote}
-{\it Example}.
-}{
-\end{quote}
-}
-
-\newenvironment{chapelsource}[1]{
-\begin{quote}
-{\it Source (#1)}.
-}{
-\end{quote}
-}
-
-\newenvironment{chapelhelper}[1]{
-\begin{quote}
-{\it Helper (#1)}.
-}{
-\end{quote}
-}
-
-\newenvironment{chapelexample}[1]{
-\begin{quote}
-{\it Example (#1)}.
-}{
-\end{quote}
-}
-
-\newenvironment{note}{
-\begin{quote}
-{\it Implementors' note}.
-}{
-\end{quote}
-}
-
-\newenvironment{rationale}{
-\begin{quote}
-{\it Rationale}.
-}{
-\end{quote}
-}
-
-\newenvironment{openissue}{
-\begin{quote}
-{\it Open issue}.
-}{
-\end{quote}
-}
-
-\newenvironment{future}{
-\begin{quote}
-{\it Future}.
-}{
-\end{quote}
-}
-
-\newenvironment{craychapel}{
-\begin{quote}
-{\it Cray's Chapel Implementation}.
-}{
-\end{quote}
-}
-
-\newenvironment{suggestionbox}{
-\begin{quote}
-{\it Suggestions?}
-}{
-\end{quote}
-}
 
 \newcommand{\rsec}[1]
            {\S\ref{#1}}
@@ -250,15 +130,13 @@
 \input{Requirements}
 \cleardoublepage
 %\part{Technical Specification}
-\input{Numerical_Integration}
+\input{Rectangle_Integration}
 \cleardoublepage
 \appendix
 \input{Requirement_Traceability}
 \cleardoublepage
-%\input{Syntax}
-%\cleardoublepage
 \markboth{Test-Driven Development with \texttt{seamless}}{Index}
-\input{spec.ind}
+\input{Numerical_Integration.ind}
 
 \bibliographystyle{plain}       
 \bibliography{master} 
