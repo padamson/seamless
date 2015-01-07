@@ -73,16 +73,17 @@
 }
 
 % example (test) environment
+% TODO: refactor example to test in extract_tests and throughout document.
 \newenvironment{chapelexample}[1]{
 \begin{quote}
-{\it Example (#1)}.
+{\it Test (#1)}.
 }{
 \end{quote}
 }
 
 \newenvironment{note}{
 \begin{quote}
-{\it Implementors' note}.
+{\it Note}.
 }{
 \end{quote}
 }
@@ -108,6 +109,25 @@
 \end{quote}
 }
 
+% seamless package notes for tutorial
+\usepackage[framemethod=TikZ]{mdframed}
+
+\mdfdefinestyle{seamlessFrame}{%
+  linecolor=blue,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=gray!20!white}
+
+\newenvironment{seamlessnote}{
+\begin{mdframed}[style=seamlessFrame]
+ {\it \lstinline{seamless}}.
+ }{
+ \end{mdframed}
+}
 
 % These are special environments for adding extra information about
 % code snippets which can be later extracted and used to generate test

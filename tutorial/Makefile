@@ -40,17 +40,17 @@ test: FORCE
 	cd test && start_test $(TESTOPTS)
 
 SPECHELPER_DIR= ./helper
-spechelpers: FORCE
+helpers: FORCE
 	rm -rf $(SPECHELPER_DIR)
 	$(SEAMLESSHOME)/util/extract_helpers -o $(SPECHELPER_DIR) $(SPECHOME)/Rectangle_Integration.tex
 
 SPECSOURCE_DIR = ./src
-specsources: FORCE
+sources: FORCE
 	rm -rf $(SPECSOURCE_DIR)
 	$(SEAMLESSHOME)/util/extract_sources -o $(SPECSOURCE_DIR) $(SPECHOME)/Rectangle_Integration.tex
 
 SPECTEST_DIR = ./test
-spectests: FORCE
+tests: FORCE
 	rm -rf $(SPECTEST_DIR)
 	$(SEAMLESSHOME)/util/extract_tests -o $(SPECTEST_DIR) $(SPECHOME)/Rectangle_Integration.tex
 
