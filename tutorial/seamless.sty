@@ -29,16 +29,24 @@
     \global\@namedef{req@#1@ismetby}{}%
 }
 
-\newcommand{\meetsrequirement}[1]{%
+\newcommand{\meetsthisreq}[1]{% renamed from previous \meetsreq
   \ref{req@#1}%
     \expandafter\g@addto@macro\csname req@#1@ismetby\expandafter\endcsname 
     \expandafter {\expandafter{\@currentspec}}%
 }
 
-\newcommand{\ismetby}[1]%
+\newcommand{\meetsreq}[1]{% (handles comma separated list)
+  \xintListWithSep{, }{\xintApply{ \meetsthisreq}{\xintCSVtoList{#1}}}%
+}
+
+\newcommand{\specswithreq}[1]%
+% The space before \ref below is intentional and will be swallowed by \xintApply
+% It is not mandatory however, the thing works without it too.
 {\xintListWithSep{, }{\xintApply { \ref}{\csname #1@ismetby\endcsname }}}
 
-\newcommand{\spec}[1]{\label{spec@#1}\def\@currentspec{spec@#1}}
+\newcommand{\spec}[1]{\label{spec@#1}\gdef\@currentspec{spec@#1}}
+% (update Jan 5, to use \gdef rather than \def in \spec, allowing more 
+% flexible usage; has its pros and cons)
 
 % TODO environment
 \newenvironment{TODO} {

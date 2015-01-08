@@ -64,7 +64,7 @@ maximum error expected for left or right rectangle method numerical integration.
 takes in a reference to a pre-defined function $f$, the bounds $a$ (real) and $b$ (real) of the 
 interval for definite integration, and the number $N$ (integer) of subintervals used.
 The function will be entered in \lstinline{leftRightRectangleMaxErr.chpl}.
-\meetsrequirement{5}
+\meetsreq{5,5.1}
 \end{enumspec}
 
 \begin{chapelhelper}{leftRightRectangleMaxErr.chpl}
@@ -102,9 +102,15 @@ ready to create our first test for a function that we will write to compute the 
 integral using the left rectangle method. This function will be called 
 \lstinline{leftRectangleIntegration}
 and will be written to \lstinline{leftRectangleIntegration.chpl}.
+Since we know we have four tests to construct (Requirements \ref{req5.1} through \ref{req5.4}),
+we will label the specification for this first test \ref{spec2.1}
+\begin{TODO}
+  Add seamless note on how to reference spec's and req's.
+\end{TODO}
+
 \begin{enumspec}
-\item\spec{2}
-Test \lstinline{leftRectangleIntegrationTest.chpl} loads modules
+\item\spec{2.1}
+Test \lstinline{leftRectangleIntegrationTest1.chpl} loads modules
 \lstinline{leftRightRectangleMaxErr} and
 \lstinline{leftRectangleIntegration}.
 It defines a function \lstinline{f} that takes $x$ (real) and returns $x^3$ (real).
@@ -120,10 +126,10 @@ It then checks to see if the absolute value of the difference between \lstinline
 and \lstinline{exact} is less than or equal to \lstinline{maximumError} and sets 
 \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
 test results in \lstinline{true}.
-\meetsrequirement{5.1}
+\meetsreq{5.1}
 \end{enumspec}
 
-\begin{chapelexample}{leftRectangleIntegrationTest.chpl}
+\begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
 A test for \lstinline{leftRectangleIntegration}.
 \begin{chapelpre}
 \end{chapelpre}
@@ -168,10 +174,72 @@ chapel source files in the test directory
 (\eg \lstinline{leftRectangleIntegrationTest.chpl} as in the example above) 
 and compares the output with the contents of a file with a \lstinline{.good} extension
 (\eg \lstinline{leftRectangleIntegrationTest.good} for the above test). 
+The last few lines of output should look something like this:
+\begin{verbatim}
+[Test Summary - 150107.202408]
+[Summary: #Successes = 0 | #Failures = 1 | #Futures = 0 | #Warnings = 0 ]
+[END]
+\end{verbatim}
 \end{seamlessnote}
+
 \begin{TODO}
-  Update test target to extract all code and run tests.
+  Update test target to run all targets necessary to run tests.
 \end{TODO}
+
+Another of the functions that we need to test our methods against is 
+$f(x) = 1/x$, where $x$ is $[1,100]$, with 1,000 approximations. 
+The exact result is the natural log of 100, or about 4.605170.
+Since the function is decreasing on the interval $[1,100]$, we can again use 
+the helper function in \lstinline{leftRightRectangleMaxErr.chpl} to compute the 
+maximum expected error.  
+Our second test 
+for the left rectangle method is very similar to the first. 
+\begin{enumspec}
+\item\spec{2.2}
+Test \lstinline{leftRectangleIntegrationTest2.chpl} loads modules
+\lstinline{leftRightRectangleMaxErr} and
+\lstinline{leftRectangleIntegration}.
+It defines a function \lstinline{f} that takes \lstinline{x: real} and returns $1/x$.
+It passes $a=1.0$, $b=100.0$, $N=1000$, and \lstinline{f} to the function
+\lstinline{leftRightRectangleMaxErr} and stores the result in the variable
+\lstinline{maximumError} (real).
+It passes $a=1.0$, $b=100.0$, $N=1000$, and \lstinline{f} to the function
+\lstinline{leftRectangleIntegration} and stores the result in the variable
+\lstinline{calculated}.
+Variable \lstinline{exact: real} is initialized with the exact value of the integral, 4.605170.
+It then checks to see if the absolute value of the difference between \lstinline{calculated} 
+and \lstinline{exact} is less than or equal to \lstinline{maximumError} and sets 
+\lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
+test results in \lstinline{true}.
+\meetsreq{5.2}
+\end{enumspec}
+
+\begin{chapelexample}{leftRectangleIntegrationTest2.chpl}
+  A test for \lstinline{leftRectangleIntegration} using $f(x) = 1/x$.
+\begin{chapelpre}
+\end{chapelpre}
+\begin{chapel}
+use leftRightRectangleMaxErr;
+use leftRectangleIntegration;
+proc f(x:real):real {
+  return 1/x;
+} 
+  
+var calculated:real;
+var exact:real = 4.605170; 
+var maximumError:real = leftRightRectangleMaxErr(a = 1.0, b = 100.0, N = 1000, f = f);
+var verified:bool;
+
+calculated = leftRectangleIntegration(a = 1.0, b = 100.0, N = 1000, f = f);
+verified = (abs(calculated - exact) <= maximumError);
+writeln(verified);
+\end{chapel}
+\begin{chapelpost}
+\end{chapelpost}
+\begin{chapeloutput}
+true
+\end{chapeloutput}
+\end{chapelexample}
 
 The code that provides the \lstinline{leftRectangleIntegration} function is straightforward.
 \begin{enumspec}
@@ -186,7 +254,7 @@ The code that provides the \lstinline{leftRectangleIntegration} function is stra
   it computes \lstinline{x_n: real} according to the expression in Table~\ref{tab:xn-rectangle} and adds
   the value of \lstinline{f(x_n)} to \lstinline{sum: real}. The function returns the product of 
   \lstinline{sum: real} and the subinterval width, \lstinline{h: real}.
-  \meetsrequirement{1}
+  \meetsreq{1}
 \end{enumspec}
 
 \begin{chapelsource}{leftRectangleIntegration.chpl}
