@@ -48,6 +48,17 @@ the area of that rectangle, and the total area is displayed on each graph.
 The exact value of the integral is 0.70525.}\label{fig:rectangle}
 \end{figure}
 
+\section{Left Rectangle Method}
+\begin{seamlessnote}
+  Now that we've described the rectangle methods fairly well, we will begin developing the code 
+  for the left rectangle version.  The first step is to develop the tests, and
+  every test needs an expected value against which to compare. For our cases, we have the exact
+  values for the integrals, but exact values alone are insufficient to test numerical methods
+  against. We need to understand by how much the output from our functions can deviate from
+  the exact values. Fortunately, the maximum error expressions for these methods are well
+  known.
+\end{seamlessnote}
+
 If $f(x)$ is increasing or decreasing on the interval $[a,b]$, the maximum error $E$ 
 for left or right rectangular numerical integration is given by
 \begin{equation}
@@ -55,7 +66,7 @@ E \leq \frac{b-a}{N}\left|f(b)-f(a)\right| \label{eq:lr-rectangle-max-error}
 \end{equation}
 
 We can create a helper function to compute the maximum error for left and right rectangle
-methods using \ref{eq:lr-rectangle-max-error}. The calculated value will be used
+methods using Equation~\ref{eq:lr-rectangle-max-error}. The calculated value will be used
 in tests for the left and right rectangle methods to check that the result is within 
 the maximum error expected for a given $a$, $b$, and $N$. 
 \begin{enumspec}
@@ -240,6 +251,15 @@ writeln(verified);
 true
 \end{chapeloutput}
 \end{chapelexample}
+
+\begin{seamlessnote}
+  By now you have likely realized that we already have some opportunities to refactor code in
+  out first two tests above. The tests are very similar except for the expressions in the 
+  test function, the exact values for the integrals, and the values of $a$, $b$, and $N$
+  passed to \lstinline{leftRightRectangleMaxErr} and \lstinline{leftRectangleIntegration}.
+  There are several ways to refactor the code above, but we will choose to create a new
+  function \lstinline{numericalIntegrationTest} and pass 
+\end{seamlessnote}
 
 The code that provides the \lstinline{leftRectangleIntegration} function is straightforward.
 \begin{enumspec}
