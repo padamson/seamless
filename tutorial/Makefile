@@ -1,6 +1,7 @@
 # configure the next three lines
-SPEC=Numerical_Integration
 SPECHOME=~/research/seamless/tutorial
+SPECSOURCE=Rectangle_Integration.tex\ Trapezoid_Integration.tex
+SPEC=Numerical_Integration
 SEAMLESSHOME=~/research/seamless
 
 DATE=$(shell date +'%H%M.%d.%m.%Y')
@@ -42,16 +43,22 @@ test: FORCE
 SPECHELPER_DIR= ./helper
 helpers: FORCE
 	rm -rf $(SPECHELPER_DIR)
-	$(SEAMLESSHOME)/util/extract_helpers -o $(SPECHELPER_DIR) $(SPECHOME)/Rectangle_Integration.tex
+	$(SEAMLESSHOME)/util/extract_helpers -o $(SPECHELPER_DIR) *.tex
 
 SPECSOURCE_DIR = ./src
 sources: FORCE
 	rm -rf $(SPECSOURCE_DIR)
-	$(SEAMLESSHOME)/util/extract_sources -o $(SPECSOURCE_DIR) $(SPECHOME)/Rectangle_Integration.tex
+	$(SEAMLESSHOME)/util/extract_sources -o $(SPECSOURCE_DIR) *.tex
 
 SPECTEST_DIR = ./test
 tests: FORCE
 	rm -rf $(SPECTEST_DIR)
-	$(SEAMLESSHOME)/util/extract_tests -o $(SPECTEST_DIR) $(SPECHOME)/Rectangle_Integration.tex
+	$(SEAMLESSHOME)/util/extract_tests -o $(SPECTEST_DIR) *.tex
+
+speclist: FORCE
+	sed -n '/\\item\\spec/p' *.tex
+
+reqlist: FORCE
+	grep '\\req' $(SPECHOME)/Requirements.tex
 
 FORCE:
