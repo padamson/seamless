@@ -2,12 +2,58 @@
 \label{Notation}
 \index{notation}
 
-Special notations are used in this specification to denote code.  
-Code is represented with a fixed-width font where keywords are
-bold and comments are italicized.
-\begin{example}
+Three types of code chunks that make up the software package are 
+presented in this specification and delineated
+with the appropriate keyword in italics: 
+\textit{Sources, Helpers, and Tests}.  The filename containing the code
+chunk is given in parenthesis following the keyword. A brief description 
+of the code chunk is also listed.
+The actual code is represented with a fixed-width font where keywords are
+bold and comments are italicized. An example helper code chunk is listed
+below.
+
+\textit{Helper (testFunctions.chpl)}. Provide the functions used
+in the tests.
 \begin{chapel}
-for i in D do   // iterate over domain D
-  writeln(i);   // output indices in D
+  proc f1(x:real):real {
+    return x**3;
+  } 
+  proc f2(x:real):real {
+    return 1/x;
+  } 
+  proc f3(x:real):real {
+    return x;
+  } 
 \end{chapel}
-\end{example}
+
+Examples of how to use the software are also provided and delineated with the
+keyword \textit{Example} followed by a description of the use case.
+
+\begin{TODO}
+  Add example.
+\end{TODO}
+
+Different color text boxes are used to highlight various types of items 
+throughout the specification.
+
+\begin{TODO}
+  Things that need to be done for this version of the software.
+\end{TODO}
+
+\begin{note}
+  Something of note that does not fit into any other category.
+\end{note}
+
+\begin{rationale}
+  An explanation for a particular design choice.
+\end{rationale}
+
+\begin{openissue}
+  Issue that we do not know how to handle.
+\end{openissue}
+
+\clearpage
+\begin{future}
+  Issue or feature that we have a story about, but which is not yet
+  fully-designed or implemented. 
+\end{future}

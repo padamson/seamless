@@ -113,8 +113,8 @@ the maximum error expected for a given $a$, $b$, and $N$.
   integral using the left rectangle method. This function will be called 
   \lstinline{leftRectangleIntegration}
   and will be written to \lstinline{leftRectangleIntegration.chpl}.
-  Since we know we have four tests to construct (Requirements \ref{req5.1} through \ref{req5.4}),
-  we will label the specification for this first test \ref{spec2.1}
+  Since we know we have four tests to construct (Requirements \ref{req@5.1} through \ref{req@5.4}),
+  we will label the specification for this first test \ref{spec@2}
   \begin{TODO}
     Add seamless note on how to reference spec's and req's.
   \end{TODO}
@@ -122,8 +122,8 @@ the maximum error expected for a given $a$, $b$, and $N$.
   \begin{enumspec}
   \item\spec{2}
     Test \lstinline{leftRectangleIntegrationTest1.chpl} loads modules
-    \lstinline{leftRightRectangleMaxErr} and
-    \lstinline{leftRectangleIntegration}.
+    \chpl{leftRightRectangleMaxErr} and
+    \lstinline[breaklines=true]{leftRectangleIntegration}.
     It defines a function \lstinline{f} that takes $x$ (real) and returns $x^3$ (real).
     It passes $a=0.0$, $b=1.0$, $N=100$, and \lstinline{f} to the function
     \lstinline{leftRightRectangleMaxErr} and stores the result in the variable
@@ -134,11 +134,17 @@ the maximum error expected for a given $a$, $b$, and $N$.
     Variable \lstinline{exact: real} is initialized with the exact value of the integral from
     Mathematica, 0.25.
     It then checks to see if the absolute value of the difference between \lstinline{calculated} 
-    and \lstinline{exact} is less than or equal to \lstinline{maximumError} and sets 
+    and \chpl{exact} is less than or equal to \chpl{maximumError} and sets 
     \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
     test results in \lstinline{true}.
     \meetsreq{5.1}
   \end{enumspec}
+
+  \begin{TODO}
+    Refactor \lstinline{chapelexample} environment to \lstinline{chapeltest} environment or
+    a more general \lstinline{test} environment. (Similarly for \lstinline{chapelsource} and
+    \lstinline{chapelhelper} environs.)
+  \end{TODO}
 
   \begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
     A test for \lstinline{leftRectangleIntegration}.

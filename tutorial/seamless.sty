@@ -48,14 +48,6 @@
 % (update Jan 5, to use \gdef rather than \def in \spec, allowing more 
 % flexible usage; has its pros and cons)
 
-% TODO environment
-\newenvironment{TODO} {
-\begin{quote}
-{\it TODO:}
-}{
-\end{quote}
-}
-
 % example environment
 \newenvironment{example}{
 \begin{quote}
@@ -81,7 +73,6 @@
 }
 
 % example (test) environment
-% TODO: refactor example to test in extract_tests and throughout document.
 \newenvironment{chapelexample}[1]{
 \begin{quote}
 {\it Test (#1)}.
@@ -89,39 +80,45 @@
 \end{quote}
 }
 
-\newenvironment{note}{
-\begin{quote}
-{\it Note}.
-}{
-\end{quote}
-}
-
-\newenvironment{rationale}{
-\begin{quote}
-{\it Rationale}.
-}{
-\end{quote}
-}
-
-\newenvironment{openissue}{
-\begin{quote}
-{\it Open issue}.
-}{
-\end{quote}
-}
-
-\newenvironment{future}{
-\begin{quote}
-{\it Future}.
-}{
-\end{quote}
-}
-
-% seamless package notes for tutorial
+% environments to produce various colorful-boxed notes
 \usepackage[framemethod=TikZ]{mdframed}
 
-\mdfdefinestyle{seamlessFrame}{%
+\mdfdefinestyle{seamlessnoteFrame}{%
   linecolor=blue,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=blue!20!white}
+
+\newenvironment{seamlessnote}{
+\begin{mdframed}[style=seamlessnoteFrame]
+ {\it \lstinline{seamless}}.
+ }{
+ \end{mdframed}
+}
+
+\mdfdefinestyle{futureFrame}{%
+  linecolor=green,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=green!20!white}
+
+\newenvironment{future}{
+\begin{mdframed}[style=futureFrame]
+  {\it Future}.
+ }{
+ \end{mdframed}
+}
+
+\mdfdefinestyle{todoFrame}{%
+  linecolor=gray,
     outerlinewidth=1pt,
     roundcorner=4pt,
     innertopmargin=\baselineskip,
@@ -130,9 +127,60 @@
     innerleftmargin=20pt,
     backgroundcolor=gray!20!white}
 
-\newenvironment{seamlessnote}{
-\begin{mdframed}[style=seamlessFrame]
- {\it \lstinline{seamless}}.
+\newenvironment{TODO}{
+\begin{mdframed}[style=todoFrame]
+  {\it TODO}.
+ }{
+ \end{mdframed}
+}
+
+\mdfdefinestyle{noteFrame}{%
+  linecolor=orange,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=orange!20!white}
+
+\newenvironment{note}{
+\begin{mdframed}[style=noteFrame]
+  {\it Note}.
+ }{
+ \end{mdframed}
+}
+
+\mdfdefinestyle{rationaleFrame}{%
+  linecolor=blue,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=blue!20!white}
+
+\newenvironment{rationale}{
+\begin{mdframed}[style=rationaleFrame]
+  {\it Rationale}.
+ }{
+ \end{mdframed}
+}
+
+\mdfdefinestyle{openissueFrame}{%
+  linecolor=red,
+    outerlinewidth=1pt,
+    roundcorner=4pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=red!20!white}
+
+\newenvironment{openissue}{
+\begin{mdframed}[style=openissueFrame]
+  {\it Open issue}.
  }{
  \end{mdframed}
 }
