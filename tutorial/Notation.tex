@@ -5,7 +5,7 @@
 Three types of code chunks that make up the software package are 
 presented in this specification and delineated
 with the appropriate keyword in italics: 
-\textit{Sources, Helpers, and Tests}.  The filename containing the code
+\textit{Source, Helper, or Test}.  The filename containing the code
 chunk is given in parenthesis following the keyword. A brief description 
 of the code chunk is also listed.
 The actual code is represented with a fixed-width font where keywords are
@@ -27,11 +27,16 @@ in the tests.
 \end{chapel}
 
 Examples of how to use the software are also provided and delineated with the
-keyword \textit{Example} followed by a description of the use case.
+keyword \textit{Example} followed by a description of the use case. Here is
+an example of an \textit{Example}:
 
-\begin{TODO}
-  Add example.
-\end{TODO}
+\textit{Example}. The following line of code calls the function
+\chpl{leftRectangleIntegration} to perform the integral of the function \chpl{f1}
+over the interval $[1.0,4.0]$ using the left rectangle method with 100 subdivisions
+and stores the result in the variable \chpl{result}.
+\begin{chapel}
+  var result: real = leftRectangleIntegration(a = 1.0, b = 4.0, N = 100, f = f1);
+\end{chapel}
 
 Different color text boxes are used to highlight various types of items 
 throughout the specification.
