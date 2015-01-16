@@ -292,3 +292,17 @@ Knuth's idea goes right to the heart of the problem. When you program in a liter
 \lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
 Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting system, but you still have to explain the code in an order that makes sense for the perl interpreter, and not for the person who's trying to understand it.
 
+\section{Tutorial Format}
+
+The remainder of this tutorial is an example \lstinline{seamless} specification for a simple software package
+to compute the integral of a one-dimensional function using various numerical integration techniques. As you will
+see, the ``off the shelf'' format of a \lstinline{seamless} tutorial supports colored text boxes to capture
+various aspects of the specification such as \textit{Notes}, \textit{Rationales}, and \textit{Futures}. In addition,
+the tutorial contains special text boxes that explain background about the \lstinline{seamless} approach in context
+of the tutorial.
+
+\begin{seamlessnote}
+  Example \lstinline{seamless} note. These text boxes are used to provide background on the \lstinline{seamless}
+  approach in context of the tutorial.
+\end{seamlessnote}
+
