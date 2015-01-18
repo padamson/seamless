@@ -1,118 +1,73 @@
-Introduction
-============
-
-The Specification in this directory is meant to serve as an example of how a single
-TeX document can be used to "seamlessly" develop the functional specification, 
-technical specification, source code, and test suite for a Chapel application.
-It also demonstrates a test driven design approach to developing Chapel code. 
-
-Example Application
-===================
-
-To illustrate the approach, we will solve the 
+The "seamless" tutorial in this directory is a LaTeX package that serves two
+purposes. The first chapter describes the seamless approach, including background
+on test-driven development and literate programming. The remaining chapters are
+an example of the seamless approach in action through development of code to solve the
 [Rosetta Code numerical integration task](http://rosettacode.org/wiki/Numerical_integration)
-in Chapel.
+in the Chapel programming language.
 
-Example TeX Package Contents
-----------------------------
+Dependencies and Prerequisites
+------------------------------
 
-The supplied example TeX package contains the following files:
+Since the seamless approach is essentially a method to develop science code within a LaTeX
+document, you must have a working [LaTeX system](http://latex-project.org/ftp.html). In order
+to "follow along" with the tutorial, extracting the source code and running the tests, you will
+need to clone [the Chapel repository](https://github.com/chapel-lang/chapel) and install it.
+In addition to the Chapel compiler (`chpl`), we are currently using the `start_test` script 
+in the `util` directory that comes with the Chapel repository to run the tests in the tutorial.
 
-* *Makefile*: self-explanatory; supports `pdflatex` and `latex`; does not generate source
-code or test suite (see `Makefile` in root directory for that)
-* *spec.cls*: provides the `spec` LaTeX document class which is a modification of the `book` class
-* *Notation.tex*: describes format and prettyprinting for code
-* *Purpose.tex*: the purpose of the specification document which is to provide the
-functional specification, technical specification, source code, and test suite (not be 
-confused with the scope of the document, which is to solve the Rosetta Code numerical
-integration task)
-* *Organization.tex*: shows how the example is organized
-* *Scope.tex*: the scope of the specification document, which is to solve the Rosetta
-Code numerical integration task (not be confused with the purpose of the document)
-* *Functional_Requirements.tex*: functional requirements of the package (**not** the technical
-specification)
-* *Numerical_Integration.tex*: example technical spec, source code, and test suite
+If you are new to LaTeX, you should go off and learn the basics before diving into the seamless
+approach. Seamless introduces only a few custom LaTeX environments and commands, and they are
+described in the tutorial. As long as you can write and compile a basic LaTeX document with numbered
+equations, cross-references (labels and references), tables, figures, and common environments 
+(e.g. enumerate, description), you should be fine. Some familiarity with the LaTeX 
+listings and enumitem packages would be useful, too, since they are used in some of the 
+environments defined by seamless.
+
+LaTeX Package Contents
+----------------------
+
+The tutorial LaTeX package contains the following files:
+
+* *Makefile*: supports `pdflatex` and `latex` to compile the LaTeX package into the tutorial
+pdf; also has targets to make source code and tests from the LaTeX package and run the tests (usage of these
+targets is described in the tutorial)
+* *seamless.cls*: provides the `seamless` LaTeX document class which is a modification of the `book` class
+* *seamless.sty*: provides several environments and commands used in the seamless approach (usage is described
+in the tutorial)
+* *Numerical_Integration.tex*: the main LaTeX document with includes for the remaining LaTeX files 
+(see Organization.tex for details on the structure of the LaTeX package
 * *chapel_listing.tex*: used with the LaTeX `listings` package to properly format Chapel code
-* *chapel_testing.tex*: Defines special environments for adding extra information about
-code snippets which can be later extracted and used to generate test codes for automated testing.
-During LaTeX compilation, the environments defined in this file throw away all text within the 
-scope of the environment, with the exception of 'chapelprintoutput' which prints the output (and is
-also extracted for testing purposes)
-* *master.bib*: contains bibliography entries for use by `bibtex`
+* *references.bib*: contains bibliography entries for use by `bibtex`
 
-Adapting the Example Package
-----------------------------
+Using the Tutorial
+------------------
 
-To adapt the example package to your own purposes, start by deciding what organization is 
+To make the PDF of the tutorial just type `make` at the commandline. Once you get to Chapter 4, Requirements,
+you will probably want to follow along in the LaTeX source while you are reading the PDF. Or, better yet,
+you can clear out the contents of Chapters 4-7 and recreate them (minus the `seamlessnote` environments).
+
+Adapting the Tutorial
+---------------------
+
+To adapt the tutorial package to your own purposes, start by deciding what organization is 
 appropriate for your application. Depending on the size of the project, you will likely need
 much more structure. The purpose of this example is to merely demonstrate the approach of 
-combining the requirements, specification, source code, and test suite into a single document.
-In now way is this example meant to represent a complete template for your document. In fact,
+combining the requirements, specification, source code, and test suite into a single LaTeX document.
+In no way is this example meant to represent a complete template for your document. In fact,
 the example is purposely chosen to be a trivial task in order to avoid the perception that there
 is a single template that is appropriate for all software applications. Your specification should
 be tailored to your application.
 
-Once you have determined the organization of your document and written 
-[a proper functional specification](http://www.joelonsoftware.com/articles/fog0000000036.html),
-you can begin writing your combined technical specification/source code/test suite by 
-renaming `Numerical_Integration.tex` appropriately (`Your_Application.tex`) and
-changing the appropriate `\input` line in `spec.tex`. 
+You will want to copy the main LaTeX file, `Numerical_Integration.tex`, to 
+something more appropriate (`Your_Application.tex`) and modify it to include only the tutorial files that
+you want to adapt (probably `Organization.tex`, `Notation.tex`, and 
+`Requirement_Traceability.tex`). You will probably want to start from scratch for other chapters of your package.
 
-Environments Available in the Specification
-===========================================
-
-The following environments are available for use in the specification:
-
-- *example*:
-  Example ExotiMO programs, along with explanation text
-  should be contained in the example environment.
-
-- *note*:
-  To make a note to future implementors of ExotiMO, or those
-  who are interested in how ExotiMO is implemented, use the note
-  environment.  
-
-- *rationale*:
-  To provide more explanation about a feature, use the rationale
-  section.   
-
-- *openissue*:
-    Issues that we do not know how to handle.
-
-- *future*:
-    Issues or features that we have a story about, but which are not yet
-  fully-designed or have not yet been implemented. 
-
-Suggestions for Writing Your Specification
-==========================================
-
-- There should be example programs for every package concept
-  and for every subsection.
-
-- In explaining a feature, try to address everyone in your audience
-  (e.g. the package developers as well as the black box users).
-  Explain the syntax of
-  the feature and any implementation details.  Also explain the
-  impact of the feature and how it is used when piecing together
-  an application.
-
-- Italicize the term when you are defining it.
-  Be sure to add it to the index.  You want as many things as possible in
-  the index.  (See below for guidance on index term creation.)
-
-
-Index Term Creation
--------------------
-
- - It is better to err on the side of too many entries; you can cull excessive
-   entries later.
-
- - Double-billing is OK, (e.g. `\index{formal arguments}` and `\index{arguments!formal}`)
-
- - An acceptable exception is when these are visually close, so would be noisy
-   (e.g. `\index{operator precedence}` and `\index{operators!precedence}`)
-   In this case, the second form is preferred.
-
- - Global topics can appear at the top level; otherwise, they are qualified by
-   the chapter name (or general topic).
-
+If you are writing a Chapel program, you shouldn't have to modify the `seamless.sty` file. 
+If you are writing a program in a different language, you will need to modify it to accomodate
+environments for test and source code. Also, you will need to provide a
+file with definitions for the listings package as in `chapel_listing.tex`. Finally, as mentioned above,
+automated testing for Chapel code is courtesy of the `start_test` script from the Chapel git repository,
+so that script will need to be adapted to accomodate your particular programming language's compiler.
+[Email me](mailto: paul.adamson.01@gmail.com), and I'll be happy to assist you with adapting seamless to
+your needs.

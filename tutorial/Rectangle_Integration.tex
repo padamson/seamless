@@ -3,6 +3,41 @@
 \index{rectangle integration}
 \index{integration!rectangle}
 
+\begin{seamlessnote}
+Suggestions for Writing Your Specification
+
+- There should be example programs for every package concept
+  and for every subsection.
+
+- In explaining a feature, try to address everyone in your audience
+  (e.g. the package developers as well as the black box users).
+  Explain the syntax of
+  the feature and any implementation details.  Also explain the
+  impact of the feature and how it is used when piecing together
+  an application.
+
+- Italicize the term when you are defining it.
+  Be sure to add it to the index.  You want as many things as possible in
+  the index.  (See below for guidance on index term creation.)
+
+
+Index Term Creation
+-------------------
+
+ - It is better to err on the side of too many entries; you can cull excessive
+   entries later.
+
+ - Double-billing is OK, (e.g. `\index{formal arguments}` and `\index{arguments!formal}`)
+
+ - An acceptable exception is when these are visually close, so would be noisy
+   (e.g. `\index{operator precedence}` and `\index{operators!precedence}`)
+   In this case, the second form is preferred.
+
+ - Global topics can appear at the top level; otherwise, they are qualified by
+   the chapter name (or general topic).
+\end{seamlessnote}
+
+
 The rectangle method computes an approximation to a 
 definite integral by finding the area of a collection of rectangles whose heights are determined 
 by the values of the function.  Specifically, the interval $[a,b]$ over which the function is to 
@@ -75,7 +110,6 @@ the maximum error expected for a given $a$, $b$, and $N$.
   takes in a reference to a pre-defined function $f$, the bounds $a$ (real) and $b$ (real) of the 
   interval for definite integration, and the number $N$ (integer) of subintervals used.
   The function will be entered in \lstinline{leftRightRectangleMaxErr.chpl}.
-  \meetsreq{5,5.1}
 \end{enumspec}
 
 \begin{chapelhelper}{leftRightRectangleMaxErr.chpl}
@@ -113,7 +147,7 @@ the maximum error expected for a given $a$, $b$, and $N$.
   integral using the left rectangle method. This function will be called 
   \lstinline{leftRectangleIntegration}
   and will be written to \lstinline{leftRectangleIntegration.chpl}.
-  Since we know we have four tests to construct (Requirements \ref{req@5.1} through \ref{req@5.4}),
+  Since we know we have four tests to construct (Requirements \ref{req@4.1} through \ref{req@4.4}),
   we will label the specification for this first test \ref{spec@2}
   \begin{TODO}
     Add seamless note on how to reference spec's and req's.
@@ -137,7 +171,7 @@ the maximum error expected for a given $a$, $b$, and $N$.
     and \chpl{exact} is less than or equal to \chpl{maximumError} and sets 
     \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
     test results in \lstinline{true}.
-    \meetsreq{5.1}
+    \meetsreq{4.1}
   \end{enumspec}
 
   \begin{TODO}
@@ -217,7 +251,7 @@ true
     it computes \lstinline{x_n: real} according to the expression in Table~\ref{tab:xn-rectangle} and adds
     the value of \lstinline{f(x_n)} to \lstinline{sum: real}. The function returns the product of 
     \lstinline{sum: real} and the subinterval width, \lstinline{h: real}.
-    \meetsreq{1}
+    \meetsreq{1.1,2,3}
   \end{enumspec}
 
   \begin{chapelsource}{leftRectangleIntegration.chpl}
@@ -280,7 +314,7 @@ for the left rectangle method is very similar to the first.
   and \lstinline{exact} is less than or equal to \lstinline{maximumError} and sets 
   \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
   test results in \lstinline{true}.
-  \meetsreq{5.2}
+  \meetsreq{4.2}
 \end{enumspec}
 
 \begin{chapelexample}{leftRectangleIntegrationTest2.chpl}
@@ -399,7 +433,8 @@ The code that provides the \lstinline{leftRectangleIntegrationWithErr} function 
   \lstinline{sum: real} and the subinterval width, \lstinline{h: real} as the first element of a two-element
   tuple..
   The second element of the returned tuple is the
-  maximum error expected calculated according to equation \ref{eq:lr-rectangle-max-error}.  \meetsreq{1,5,5.1}
+  maximum error expected calculated according to equation \ref{eq:lr-rectangle-max-error}.
+  \meetsreq{1,5,5.1}
 \end{enumspec}
 
 \begin{chapelsource}{leftRectangleIntegrationWithErr.chpl}
@@ -487,14 +522,14 @@ to determine the maximum expected error. First, we must determine the maximum va
 the second derivative before we can compute the maximum error using 
 Equation~\ref{eq:rectangle-max-error}. 
 For $f(x) = x^3$, the second derivative is $f''(x) = 6x$. On the interval specified by
-Requirement~\ref{req@5.1}, $[0,1]$, the maximum value is $f''(1) = 6$.
+Requirement~\ref{req@4.1}, $[0,1]$, the maximum value is $f''(1) = 6$.
 For $f(x) = 1/x$, the second derivative is $f''(x) = 2x^{-3}$. On the interval specified by
-Requirement~\ref{req@5.2}, $[1,100]$, the maximum value is $f''(1) = 2$.
-The function $f(x) = x$ specified by Requirement~\ref{req@5.3} and \ref{req@5.4}, does not have
+Requirement~\ref{req@4.2}, $[1,100]$, the maximum value is $f''(1) = 2$.
+The function $f(x) = x$ specified by Requirement~\ref{req@4.3} and \ref{req@4.4}, does not have
 a second derivative. The midpoint method is expected to give a very accurate answer for this function,
 so we will use a value of 0.00001 for the maximum expected error for the two final tests.
-The calculated maximum expected error for the tests specified in Requirements~\ref{req@5.1} and
-\ref{req@5.2} are given in Table~\ref{tab:midpoint-rectangle-error}.
+The calculated maximum expected error for the tests specified in Requirements~\ref{req@4.1} and
+\ref{req@4.2} are given in Table~\ref{tab:midpoint-rectangle-error}.
 
 \begin{table}[htbp]
   \centering

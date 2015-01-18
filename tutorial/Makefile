@@ -1,8 +1,8 @@
-# configure the next three lines
-SPECHOME=~/research/seamless/tutorial
-SPECSOURCE=Rectangle_Integration.tex\ Trapezoid_Integration.tex
+# configure the next two lines
 SPEC=Numerical_Integration
 SEAMLESSHOME=~/research/seamless
+
+SPECHOME=`pwd`
 
 DATE=$(shell date +'%H%M.%d.%m.%Y')
 
