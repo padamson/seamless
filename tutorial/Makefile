@@ -1,8 +1,8 @@
 # configure the next two lines
 SPEC=Numerical_Integration
 SEAMLESSHOME=~/research/seamless
+SPECHOME=~/research/seamless/tutorial
 
-SPECHOME=`pwd`
 
 DATE=$(shell date +'%H%M.%d.%m.%Y')
 
