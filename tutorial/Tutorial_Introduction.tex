@@ -1,8 +1,25 @@
 \sekshun{Introduction}
 \label{Tutorial_Introduction}
 
-Within the \lstinline{seamless} framework for science code development, a test-driven development approach
-is combined with concepts from literate programming\cite{knuth} and 
+Several characteristics of legacy code present challenges to the scientific computing community. 
+These characteristics are symptoms of the fact that, in general, the codes are written by individuals who are 
+scentists or engineers first and computer programmers second. 
+Often times, a code is very poorly documented, and the test suite amounts to a few exaample 
+input decks and expected output decks. The vast majority of modules, procedures, and objects within a code
+will likely not have unit tests associated with them. 
+In addition to basic shortfalls in documentation, there is often a lack of context in the documentation that
+is available.
+Although adaptation patterns can be found in a sizable percentage of recently developed science codes, 
+the traditional scientific software stack lacks adequate abstractions and tools necessary
+to port it to a new execution environment or apply it to a problem set different than what was 
+originally intended.\cite{kang}
+While scientists are incentivized and indeed desire to produce readable, reusable code, these deficiencies 
+are roadblocks to that end.\cite{petre} 
+
+The purpose of the \seamless framework for science code development is to provide scientists and engineers
+with some tools to help them produce code that is reusable and maintainable. 
+In the \seamless framework, a test-driven development 
+approach is combined with concepts from literate programming\cite{knuth} and 
 best practices in software engineering. The resulting framework encourages development of very modular, 
 well-documented code that is robust and reusable.  Currently, the framework supports 
 the Chapel~(\url{http://chapel.cray.com}) programming language, but extension to other languages is 
@@ -87,7 +104,6 @@ the electron-electron repulsion integral in a quantum chemistry code must have s
 of the type of electronic wavefunction for which the code is valid! 
 
 \section{Literate Programming}
-Enter stage right...literate programming. 
 
 A typical computer program consists of a text file 
 containing program code. Strewn throughout will likely be scant plain text descriptions separated out by 
@@ -150,6 +166,9 @@ study highlighted the widespread lack of basic context in available documentatio
 Literate programming solves this problem, ensuring that context is created while the program
 is written.
 
+
+
+\section{The \texttt{seamless} Framework}
 Test-driven development and literate programming are certainly compatible.  In fact, they are 
 complementary and their combined use is a rare actual example of ``the whole is greater
 than the sum of its parts,'' especially in the context of developing science code.  
@@ -159,7 +178,7 @@ manner, the scientist develops the code that solves the right problem in an effi
 As will be seen below, the proccess also supports several fundamental aspects of good software
 engineering.
 
-\subsection{The \texttt{seamless} Framework}\label{tdd-better}
+\subsection{Writing Good Requirements}\label{good-requirements}
 
 The \seamless framework begins first with writing a high-level requirements specification.
 Failing to write down the requirements is the single biggest unnecessary risk a developer
@@ -179,6 +198,7 @@ Even if a specification is written solely for the benefit of a lone developer, t
 writing the specification---describing how the program works in 
 detail---will force the developer to begin thinking about design of the program.
 
+\subsection{The Code Development Process Within the \texttt{seamless} Framework}\label{tdd-better}
 Once a high-level requirements specification is in hand, the remainder of the \seamless process is
 used to decompose the requirements, document the solution, write tests, and write source code:
 \begin{enumerate}
@@ -222,7 +242,7 @@ have the following characteristics:
   \item reusable
 \end{itemize}
 
-\section{\texttt{seamless} Package}
+\section{Tutorial Structure}
 
 The following files make up this tutorial for \seamless:
 \begin{description}
@@ -238,16 +258,18 @@ The following files make up this tutorial for \seamless:
   \item[references.bib] contains bibliography entries for use by `bibtex`
 \end{description}
 
-Adapting \lstinline{spec.tex} and the associated \LaTeX\xspace files for a new software project is straightforward. 
-Once you've adapted the structure of the \LaTeX\xspace package in the \lstinline{\spec} directory for your
+Adapting the associated \LaTeX\xspace files for a new software project is straightforward. 
+Once you've adapted the structure of the \LaTeX\xspace package in the \lstinline{\tutorial} directory for your
 purposes, and you've written a decent requirement specification, you're ready to begin the process described in
 Section \ref{tdd-better}. 
 
-As I stated above, the \lstinline{seamless} approach is ``quasi-literate'' programming.  While the approach
-that I've described meets the intent of the requirements outlined in Section 
-\ref{literate-program-requirements} above, it fails to fully implement one of the two main concepts of
+\section{\texttt{seamless} Does Not Fully Implement Literate Programming}
+
+The \seamless framework borrows from literate programming, but it is not a full implementation of its
+ideas.  While the approach that I've described meets the intent of the requirements outlined in Section 
+\ref{literate-program-requirements} above, it only fully implement one of the two main concepts of
 literate programming.\cite{knuth}
-The first concept, described at length above, is that code should have good documentation with all of the
+The first concept, already described at length, is that code should have good documentation with all of the
 supporting mathematics and graphics necessary to convey its function.
 
 The other main concept of literate programming is that the best order to explain the parts of a program 
@@ -273,19 +295,17 @@ and reading in data, not discussing the error handling just because the computer
 between the open and the read. You probably prefer to discuss the main logic first, returning to the error-handling 
 part at some later point in the documentation, perhaps in a section of the documentation that covers error-handling
 for the entire software package.
-
 Also, for a collaborator that is reviewing code to understand and perhaps contribute to it, having all of that
 error handling present in the first encounter with the code block is very distracting. It is an impediment to 
 understanding the main purpose of the code.
 
-\begin{TODO}
-Reword next paragraph and describe how the seamless approach deals with it (presenting evolutions of the
-code and only using the latest one).
-\end{TODO}
-Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you 
-get to write the code in any order you want to. The literate programming system comes with a utility program, 
-usually called 
-\lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
-Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting 
-system, but you still have to explain the code in an order that makes sense for the perl interpreter, and 
-not for the person who's trying to understand it.
+When you program in a true literate programming system, you 
+get to write code in any order that supports documentation of the code. The literate programming system 
+comes with a utility program, 
+usually called \lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
+This aspect of literate programming is not implemented in the \seamless framework. This is a conscious decision 
+that was made in developing the framework in order to allow the 
+TDD approach to drive the order in which test and source code is developed and presented to the
+reviewer.  The compromise allows us to take advantage of many of the characteristics of literate programming while
+executing a TDD process.
+

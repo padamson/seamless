@@ -2,6 +2,8 @@
 \label{Notation}
 \index{notation}
 
+\section{Code Chunks}
+
 Three types of code chunks that make up the software package are 
 presented in this specification and delineated
 with the appropriate keyword in italics: 
@@ -26,6 +28,8 @@ in the tests.
   } 
 \end{chapel}
 
+\section{Examples}
+
 Examples of how to use the software are also provided and delineated with the
 keyword \textit{Example} followed by a description of the use case. Here is
 an example of an \textit{Example}:
@@ -38,8 +42,11 @@ and stores the result in the variable \chpl{result}.
   var result: real = leftRectangleIntegration(a = 1.0, b = 4.0, N = 100, f = f1);
 \end{chapel}
 
-Different color text boxes are used to highlight various types of items 
-throughout the specification.
+\section{Text Boxes}
+Different color text boxes are used to highlight \textit{TODO's, Notes,
+Rationales, Open Issues,} and \textit{Futures} throughout the specification.
+Examples of these text boxes along with definitions for each of these terms
+is given below:
 
 \begin{TODO}
   Things that need to be done for this version of the software.
@@ -57,7 +64,6 @@ throughout the specification.
   Issue that we do not know how to handle.
 \end{openissue}
 
-\clearpage
 \begin{future}
   Issue or feature that we have a story about, but which is not yet
   fully-designed or implemented. 
