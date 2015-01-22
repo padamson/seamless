@@ -1,15 +1,32 @@
-\sekshun{Tutorial Introduction}
+\sekshun{Introduction}
 \label{Tutorial_Introduction}
 
-\begin{TODO}
-  Introduction.
-\end{TODO}
+Within the \lstinline{seamless} framework for science code development, a test-driven development approach
+is combined with concepts from literate programming\cite{knuth} and 
+best practices in software engineering. The resulting framework encourages development of very modular, 
+well-documented code that is robust and reusable.  Currently, the framework supports 
+the Chapel~(\url{http://chapel.cray.com}) programming language, but extension to other languages is 
+straightforward.  This extensibility is possible because the framework is designed around the \latex
+typesetting system. When following the \seamless approach, the developer is essentially writing a \latex
+document containing the requirements, documentation, specification, test suite, and source code. Tests and 
+source code are extracted and the tests are run by executing a script that is provided with the framework.
 
-Before we dive into developing requirements and hacking away at code, a brief description of 
-the \lstinline{seamless} approach to software development, a literate programming approach to 
-test-driven development, is in order.  (Well, as you will see later, the \lstinline{seamless} approach
-is probably better described as a ``quasi-literate programming'' approach, but I will explain
-in due course.)
+In addition to this introductory chapter, the remainder of the tutorial is an example \seamless 
+specification for a simple software package
+to compute the integral of a one-dimensional function using various numerical integration techniques. 
+More specifically, the tutorial solves the Rosetta Code numerical integration 
+task\cite{rosetta-code-numerical-integration} in Chapel. 
+As you will
+see, the ``off the shelf'' format of a \lstinline{seamless} specification supports colored text boxes to capture
+various aspects of the specification such as \textit{Notes}, \textit{Rationales}, and \textit{Futures}. In addition,
+the tutorial contains an additional type of text box not normally present in a specification to explain 
+background information about the \lstinline{seamless} framework in context of the tutorial. Here is an example of one
+of these special text boxes used only in the tutorial:
+\begin{seamlessnote}
+  Example text box used to provide background on the \lstinline{seamless} approach in context of the tutorial.
+\end{seamlessnote}
+But before we get to the example use of \seamless, some background on test-driven development, literate programming,
+and software engineering practices is in order.
 
 \section{Test-Driven Development}
 Test-driven development, or TDD, is the notion that developers will improve both the design and
@@ -18,52 +35,56 @@ code} that implements the feature according to the specification. In other words
 begins with writing an automated test for code that does not yet 
 exist. After a test is written for a particular feature defined in the specification, the 
 programmer then writes the implementing code to get the test to pass. This process is repeated until
-all features in the specification are implemented. 
-
+all features in the specification are implemented.  
 The idea is that by writing tests before code, rather than after, the tests will help guide
 the design in small, incremental steps. Over time, this creates a well-factored and robust
 codebase that is easier to modify.
 
-\begin{TODO}
-Consider adding a story about TDD.
-\end{TODO}
+\subsection{A Typical TDD Process}\label{tdd-classic}
 
-\subsection{The Classic TDD Process}\label{tdd-classic}
-
-\begin{TODO} The following process is almost ver batim from Rails 4 Test Prescriptions. Need to 
-cite the work and tailor to technical computing/Chapel code development.
-\end{TODO}
-
-The classic TDD process goes something like this:
+A typical TDD process goes something like this:
 \begin{enumerate}
-\item Create a test. The test should be short and test for one thing in your code. The test
-should run automatically.
-\item Make sure the test fails. Verifying the test failure before you write code helps ensure
-that the test really does what you expect.
-\item Write the simplest code that could possibly make the test pass. Don't worry about good
-code yet. Don't look ahead. Sometimes, write just enough code to clear the current error.
-\item After the test passes, refactor to improve the code. Clean up duplication. Optimize.
-Create new abstractions. Refactoring is a key part of design, so don't skip this. 
-\item Run the tests again to make sure you haven't changed any behavior.
+\item Create a test. The test should be short and test for only one code feature. The test
+  should run automatically.
+\item Make sure the test fails. Verifying test failure before writing code helps to ensure
+  that you are indeed testing the intended feature.
+\item Write the simplest code possible to make the test pass. The code doesn't necessarily 
+  need to be `good' yet.  Try not to look ahead too far. Write just enough code to clear 
+  the current error.
+\item Refactor the code. Once the test passes, improve the code through refactoring. 
+  Clean up duplication. Optimize. Perhaps implement some parallelization. Consider creating new abstractions or
+  objects.  Refactoring is a key part of design, so spend an appropriate amount of time on this step.
+\item Retest. Run the tests again to make sure you haven't changed any behavior.
+\item Retest and refactor some more. Do you get the point on refactoring yet?
 \end{enumerate}
 
 Repeat the above cycle until your code is complete. This will, in theory, ensure that your code is
 always as simple as possible and completely covered by tests. 
 
 \subsection{TDD Aids Design}
+Test-driven development aids software design in several ways. Deciding which test to write next forces you
+to think about what functionality you need in your code in a systematic way. Deciding how to test your code for
+a given functionality forces you to think about how that functionality should be implemented, driving you to 
+consider how the rest of the code will interface with it. After the test passes, you refactor and refactor again,
+improving the design of the code in incremental ways. Since you have working unit tests for all of the functionality
+that has been implemented prior to a given refactoring stage, you can feel confident that the improvements you make
+through refactoring will not break another part of the code.
 
-\begin{TODO}
-Describe in more detail how TDD aids design. Draw from Rails Test Prescriptions, pg 5+.
-\end{TODO}
+Continual alignment of source code with relevant tests as described above tends to ensure that the resulting 
+software package is made up of small functions and objects that are loosely coupled and have minimal side effects.
+TDD encourages a good code structure with low coupling (different parts of the code have minimal dependencies
+on each other) and high cohesion (code that is in the same unit is all related). Code written without tests will
+tend to have low cohesion and high coupling characteristics, making it much harder to cover with tests
+written after development.
 
 \subsection{Tests as Code Documentation}
-A case can be made in some domains (e.g. web development) that automated test suites 
-provide an alternate means of documenting code--that
+A case can be made in some domains (\eg web development) that automated test suites 
+provide an alternate means of documenting code---that
 the tests are, in essence, a detailed specification of the code's behavior. This is somewhat true in
 technical computing, but full documentation of scientific and engineering software requires 
 more than just brief comments and example output. Surely, documentation for a function that computes 
 the electron-electron repulsion integral in a quantum chemistry code must have some description
-of the type of electronic wavefunction for which the code is valid!
+of the type of electronic wavefunction for which the code is valid! 
 
 \section{Literate Programming}
 Enter stage right...literate programming. 
@@ -129,44 +150,39 @@ study highlighted the widespread lack of basic context in available documentatio
 Literate programming solves this problem, ensuring that context is created while the program
 is written.
 
-\section{Literate Programming Approach to Test-Driven Development}
 Test-driven development and literate programming are certainly compatible.  In fact, they are 
 complementary and their combined use is a rare actual example of ``the whole is greater
-than the sum of its parts,'' especially in the context of developing scientific code.  
+than the sum of its parts,'' especially in the context of developing science code.  
 In one document, we can clearly outline the problem to be solved, develop a test for the 
 code that we want, and document the code that solves the problem. As this is done in an incremental
 manner, the scientist develops the code that solves the right problem in an efficient and robust manner.
 As will be seen below, the proccess also supports several fundamental aspects of good software
 engineering.
 
-\subsection{A Better TDD Process}\label{tdd-better}
+\subsection{The \texttt{seamless} Framework}\label{tdd-better}
 
-\begin{TODO}
-Describe why you must begin with good requirements.
-\end{TODO}
-
-A better TDD process begins first with a ``good'' requirement specification.
-Failing to write a specification is the single biggest unnecessary risk a developer
+The \seamless framework begins first with writing a high-level requirements specification.
+Failing to write down the requirements is the single biggest unnecessary risk a developer
 can take in a software project, resulting in greatly diminished productivity. 
 For any non-trivial project (more than a few days of coding for one programmer), 
-the lack of a thorough specification will always result in more time and lower quality code.
+the lack of a thorough requirements specification will always result in more time spent and lower quality code.
 Even for trivial examples, a short, informal specification will at least help to ensure
 accuracy of the resulting code.
 
-The specification is the high-level design of the program. 
-Most importantly, it clearly defines the problem that the program will solve. 
-Of almost equal importance is the specification of the
-basic algorithms and outputs of the code. During development of the requirement specification,
+Depending on the size and complexity of the code, the requirements specification can have
+multiple levels (or \textit{layers}). 
+It clearly defines the problem that the program will solve. 
+At some point in development of the requirements specification,
 the developer should evaluate available algorithms and consider how data produced from the 
 program will be used.
-Even if a spec is written solely for the benefit of a lone developer, the act of 
+Even if a specification is written solely for the benefit of a lone developer, the act of 
 writing the specification---describing how the program works in 
-minute detail---will force design of the program.
+detail---will force the developer to begin thinking about design of the program.
 
-Once a specification is in hand, an improved TDD process (section \ref{tdd-classic}) can be 
-undertaken in context of literate programming:
+Once a high-level requirements specification is in hand, the remainder of the \seamless process is
+used to decompose the requirements, document the solution, write tests, and write source code:
 \begin{enumerate}
-\item Document the problem and its solution.
+\item Document a part of the problem and its solution.
   \begin{enumerate}
   \item Describe a small part of the problem to be solved. The description should include    
 all aids such as mathematics and graphics that enhance communication of the problem 
@@ -189,6 +205,7 @@ statement and the understanding of its challenge.
   \item Write the simplest code possible to pass the test. 
   \item After the test passes, refactor to improve the code. 
   \item Run the tests again to make sure the code still passes.
+  \item Refactor and retest some more.
   \end{enumerate}
 \end{enumerate}
 
@@ -205,48 +222,26 @@ have the following characteristics:
   \item reusable
 \end{itemize}
 
-\subsection{Additional Software Engineering Considerations}
-
-\begin{TODO}
-Insert description of how above approach supports good software engineering (feedback to requirements, \etc).
-\end{TODO}
-
 \section{\texttt{seamless} Package}
-\begin{TODO}
-Update this description once \lstinline{seamless} stabilizes.
-\end{TODO}
 
-The \lstinline{seamless} package aims to enable a literate programming approach to test-driven
-development of Chapel code. It extends slightly functionality provided in the distribution
-of the Chapel language source for extracting test code from the Chapel language specification.
-The following files are provided in \lstinline{seamless}:
+The following files make up this tutorial for \seamless:
 \begin{description}
-\item[/Makefile] main project Makefile
-\item[/spec] directory containing the \LaTeX\xspace source for this document, including an 
-example of the \lstinline{seamless} approach to developing a numerical integration code in the Chapel language
-\item[/spec/Makefile] the Makefile to build this document
-\item[/spec/spec.tex] the main \LaTeX\xspace file for this document; other \LaTeX\xspace files not 
-listed here are self-explanatory
-\item[/spec/Numerical\_Integration.tex] the chapter of this document that contains the example of a literate
-programming approach to test-driven development of chapel code
-\item[/spec/chapel\_listing.tex] used by the \LaTeX\xspace \lstinline{listing} package to prettyprint Chapel code
-\item[/spec/chapel\_testing.tex] defines environments for adding extra information about
-test code chunks 
-\item[/util/extract\_tests] Python script that extracts test code from \LaTeX\xspace source
-\item[/util/extract\_sources] Python script that extracts source code from \LaTeX\xspace source 
+  \item[Makefile] supports `pdflatex` and `latex` to compile the LaTeX package into the tutorial
+    pdf; also has targets to make source code and tests from the LaTeX package and run the tests (usage of these
+    targets is described in the tutorial)
+  \item[seamless.cls] provides the `seamless` LaTeX document class which is a modification of the `book` class
+  \item[seamless.sty] provides several environments and commands used in the seamless approach (usage is described
+    in the tutorial)
+  \item[Numerical\_Integration.tex] the main LaTeX document with includes for the remaining LaTeX files 
+    (see Chapter~\ref{Organization}, Organization, for details on the structure of the tutorial)
+  \item[chapel\_listing.tex] used with the LaTeX `listings` package to properly format Chapel code
+  \item[references.bib] contains bibliography entries for use by `bibtex`
 \end{description}
-\begin{TODO}
-combine extract python scripts and update above list
-\end{TODO}
 
 Adapting \lstinline{spec.tex} and the associated \LaTeX\xspace files for a new software project is straightforward. 
 Once you've adapted the structure of the \LaTeX\xspace package in the \lstinline{\spec} directory for your
 purposes, and you've written a decent requirement specification, you're ready to begin the process described in
 Section \ref{tdd-better}. 
-To illustrate the process, we will solve the Rosetta Code numerical integration 
-task\cite{rosetta-code-numerical-integration} in Chapel. As I go through the example, I will highlight
-how to use the \lstinline{seamless} package to execute the literate programming and test-driven development
-approach.
 
 As I stated above, the \lstinline{seamless} approach is ``quasi-literate'' programming.  While the approach
 that I've described meets the intent of the requirements outlined in Section 
@@ -279,7 +274,6 @@ between the open and the read. You probably prefer to discuss the main logic fir
 part at some later point in the documentation, perhaps in a section of the documentation that covers error-handling
 for the entire software package.
 
-
 Also, for a collaborator that is reviewing code to understand and perhaps contribute to it, having all of that
 error handling present in the first encounter with the code block is very distracting. It is an impediment to 
 understanding the main purpose of the code.
@@ -288,21 +282,10 @@ understanding the main purpose of the code.
 Reword next paragraph and describe how the seamless approach deals with it (presenting evolutions of the
 code and only using the latest one).
 \end{TODO}
-Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you get to write the code in any order you want to. The literate programming system comes with a utility program, usually called 
+Knuth's idea goes right to the heart of the problem. When you program in a literate programming system, you 
+get to write the code in any order you want to. The literate programming system comes with a utility program, 
+usually called 
 \lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
-Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting system, but you still have to explain the code in an order that makes sense for the perl interpreter, and not for the person who's trying to understand it.
-
-\section{Tutorial Format}
-
-The remainder of this tutorial is an example \lstinline{seamless} specification for a simple software package
-to compute the integral of a one-dimensional function using various numerical integration techniques. As you will
-see, the ``off the shelf'' format of a \lstinline{seamless} tutorial supports colored text boxes to capture
-various aspects of the specification such as \textit{Notes}, \textit{Rationales}, and \textit{Futures}. In addition,
-the tutorial contains special text boxes that explain background about the \lstinline{seamless} approach in context
-of the tutorial.
-
-\begin{seamlessnote}
-  Example \lstinline{seamless} note. These text boxes are used to provide background on the \lstinline{seamless}
-  approach in context of the tutorial.
-\end{seamlessnote}
-
+Perl doesn't have anything like tangle. You can write comments and typeset them with your favorite typesetting 
+system, but you still have to explain the code in an order that makes sense for the perl interpreter, and 
+not for the person who's trying to understand it.
