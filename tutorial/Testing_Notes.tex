@@ -1,0 +1,49 @@
+\sekshun{Testing Notes}
+\label{Testing_Notes}
+\index{testing notes}
+I am trying to use Test Driven Development to implement my signal processing library. But I have a little doubt: Assume I am trying to implement a sine method (I'm not):
+
+Write the test (pseudo-code)
+
+assertEqual(0, sine(0))
+Write the first implementation
+
+function sine(radians)
+    return 0
+    Second test
+
+    assertEqual(1, sine(pi))
+    At this point, should I:
+
+    implement a smart code that will work for pi and other values, or
+    implement the dumbest code that will work only for 0 and pi?
+    If you choose the second option, when can I jump to the first option? I will have to do it eventually...
+
+    At this point, should I:
+
+    implement real code that will work outside the two simple tests?
+
+    implement more dumbest code that will work only for the two simple tests?
+
+    Neither. I'm not sure where you got the "write just one test at a time" approach from, but it sure is a slow way to go.
+
+    The point is to write clear tests and use that clear testing to design your program.
+
+    So, write enough tests to actually validate a sine function. Two tests are clearly inadequate.
+
+    In the case of a continuous function, you have to provide a table of known good values eventually. Why wait?
+
+    However, testing continuous functions has some problems. You can't follow a dumb TDD procedure.
+
+    You can't test all floating-point values between 0 and 2*pi. You can't test a few random values.
+
+    In the case of continuous functions, a "strict, unthinking TDD" doesn't work. The issue here is that you know your sine function implementation will be based on a bunch of symmetries. You have to test based on those symmetry rules you're using. Bugs hide in cracks and corners. Edge cases and corner cases are part of the implementation and if you unthinkingly follow TDD you can't test that.
+
+    However, for continuous functions, you must test the edge and corner cases of the implementation.
+
+    This doesn't mean TDD is broken or inadequate. It says that slavish devotion to a "test first" can't work without some thinking about what you real goal is.
+
+    In kind of the strict baby-step TDD, you might implement the dumb method to get back to green, and then refactor the duplication inherent in the dumb code (testing for the input value is a kind of duplication between the test and the code) by producing a real algorithm. The hard part about getting a feel for TDD with such an algorithm is that your acceptance tests are really sitting right next to you (the table S. Lott suggests), so you kind of keep an eye on them the whole time. In more typical TDD, the unit is divorced enough from the whole that the acceptance tests can't just be plugged in right there, so you don't start thinking about testing for all scenarios, because all scenarios are not obvious.
+
+    Typically, you might have a real algorithm after one or two cases. The important thing about TDD is that it is driving design, not the algorithm. Once you have enough cases to satisfy the design needs, the value in TDD drops significantly. Then the tests more convert into covering corner cases to ensure your algorithm is correct in all aspects you can think of. So, if you are confident in how to build the algorithm, go for it. The kinds of baby steps you are talking about are only appropriate when you are uncertain. By taking such baby steps you start to build out the boundaries of what your code has to cover, even though your implementation isn't actually real yet. But as I said, that is more for when you are uncertain about how to build the algorithm.
+
