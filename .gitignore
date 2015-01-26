@@ -16,3 +16,22 @@
 /tutorial/Syntax.tex
 /tutorial/fig/*converted-to.pdf
 /tutorial/bin/
+
+# tutorial slides ignores
+/tutorial/slides/intro/*.bbl
+/tutorial/slides/intro/*.blg
+/tutorial/slides/intro/*.aux
+/tutorial/slides/intro/*.ind
+/tutorial/slides/intro/*.idx
+/tutorial/slides/intro/*.ilg
+/tutorial/slides/intro/*.log
+/tutorial/slides/intro/*.out
+/tutorial/slides/intro/*.toc
+/tutorial/slides/intro/*.dvi
+/tutorial/slides/intro/*.ps
+/tutorial/slides/intro/*.pdf
+/tutorial/slides/intro/*.snm
+/tutorial/slides/intro/*.nav
+/tutorial/slides/intro/*.vrb
+/tutorial/slides/intro/fig/*converted-to.pdf
+

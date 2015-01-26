@@ -13,8 +13,12 @@ Although adaptation patterns can be found in a sizable percentage of recently de
 the traditional scientific software stack lacks adequate abstractions and tools necessary
 to port it to a new execution environment or apply it to a problem set different than what was 
 originally intended.\cite{kang}
-While scientists are incentivized and indeed desire to produce readable, reusable code, these deficiencies 
+While scientists are incentivized and indeed desire to produce reusable, maintainable code, these deficiencies 
 are roadblocks to that end.\cite{petre} 
+
+\begin{TODO}
+  Add paragraph on overhead of good software engineering. Integration of multiple tools.
+\end{TODO}
 
 The purpose of the \seamless framework for science code development is to provide scientists and engineers
 with some tools to help them produce code that is reusable and maintainable. 
@@ -107,7 +111,7 @@ of the type of electronic wavefunction for which the code is valid!
 
 A typical computer program consists of a text file 
 containing program code. Strewn throughout will likely be scant plain text descriptions separated out by 
-``comment delimeters'' that document various aspects of the code.
+``comment delimiters'' that document various aspects of the code.
 Since the actual code itself is presented in a such a way that supports the syntax, ordering, and structure 
 that the programming language (and hence compiler) requires, the code comments will
 be relatively disorganized and disjointed if you are reading them for documentation purposes. 
@@ -121,7 +125,7 @@ the literate programmer writes \textit{thorough, well-organized, and content-ric
 The result is that the commentary is no longer hidden within a program surrounded by 
 comment delimiters; instead, it is made the main focus. 
 The ``program'' becomes primarily a document directed at humans, with the 
-code interspersed within the documentation, separted out by ``code delimiters'' so that it can be extracted 
+code interspersed within the documentation, separated out by ``code delimiters'' so that it can be extracted 
 out and processed into source code by literate programming tools. The nature of literate programming is 
 summarized pretty well in a quote from the online documentation for the FunnelWeb literate programming
 preprocessor:
@@ -166,8 +170,6 @@ study highlighted the widespread lack of basic context in available documentatio
 Literate programming solves this problem, ensuring that context is created while the program
 is written.
 
-
-
 \section{The \texttt{seamless} Framework}
 Test-driven development and literate programming are certainly compatible.  In fact, they are 
 complementary and their combined use is a rare actual example of ``the whole is greater
@@ -175,8 +177,12 @@ than the sum of its parts,'' especially in the context of developing science cod
 In one document, we can clearly outline the problem to be solved, develop a test for the 
 code that we want, and document the code that solves the problem. As this is done in an incremental
 manner, the scientist develops the code that solves the right problem in an efficient and robust manner.
-As will be seen below, the proccess also supports several fundamental aspects of good software
+As will be seen below, the process also supports several fundamental aspects of good software
 engineering.
+
+\begin{TODO}
+  Add better overview of \seamless. See intro slides.
+\end{TODO}
 
 \subsection{Writing Good Requirements}\label{good-requirements}
 
@@ -229,7 +235,7 @@ statement and the understanding of its challenge.
   \end{enumerate}
 \end{enumerate}
 
-Repeat the above cycle until your code is complete. In theory, the resulting code will 
+Repeat the above cycle until your code is complete. This process will help to ensure that your code will 
 have the following characteristics:
 \begin{itemize}
   \item completely documented
