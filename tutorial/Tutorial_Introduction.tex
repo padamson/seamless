@@ -38,14 +38,22 @@ to compute the integral of a one-dimensional function using various numerical in
 More specifically, the tutorial solves the Rosetta Code numerical integration 
 task\cite{rosetta-code-numerical-integration} in Chapel. 
 As you will
-see, the ``off the shelf'' format of a \lstinline{seamless} specification supports colored text boxes to capture
+see, the ``off the shelf'' format of a \seamless specification supports colored text boxes to capture
 various aspects of the specification such as \textit{Notes}, \textit{Rationales}, and \textit{Futures}. In addition,
 the tutorial contains an additional type of text box not normally present in a specification to explain 
-background information about the \lstinline{seamless} framework in context of the tutorial. Here is an example of one
-of these special text boxes used only in the tutorial:
+background information about the \seamless framework in context of the tutorial. Here is an example of one
+of these special \seamless note text boxes used only in the tutorial:
 \begin{seamlessnote}
-  Example text box used to provide background on the \lstinline{seamless} approach in context of the tutorial.
+  Example text box used to provide background on the \seamless approach in context of the tutorial.
 \end{seamlessnote}
+\latex source, shell commands, and other computer syntax is placed in the \verb|verbatim| environment 
+and is typeset in a typewriter font.
+Many examples in this tutorial use command-line commands. All command line examples use 
+a Unix-style command line prompt (a dollar sign) with the directory in brackets preceding it, as follows:
+\begin{verbatim}
+[./tutorial/] $ echo 'hello, world!'
+hello, world!
+\end{verbatim}
 But before we get to the example use of \seamless, some background on test-driven development, literate programming,
 and software engineering practices is in order.
 
@@ -252,20 +260,29 @@ have the following characteristics:
 
 The following files make up this tutorial for \seamless:
 \begin{description}
-  \item[Makefile] supports `pdflatex` and `latex` to compile the LaTeX package into the tutorial
-    pdf; also has targets to make source code and tests from the LaTeX package and run the tests (usage of these
+  \item[Makefile] supports \verb|pdflatex| and \verb|latex| to compile the \latex package into the tutorial
+    pdf; also has targets to make source code and tests from the \latex package and run the tests (usage of these
     targets is described in the tutorial)
-  \item[seamless.cls] provides the `seamless` LaTeX document class which is a modification of the `book` class
+  \item[seamless.cls] provides the \seamless \latex document class which is a modification of the \verb|book| class
   \item[seamless.sty] provides several environments and commands used in the seamless approach (usage is described
     in the tutorial)
-  \item[Numerical\_Integration.tex] the main LaTeX document with includes for the remaining LaTeX files 
+  \item[Numerical\_Integration.tex] the main \latex document with includes for the remaining \latex files 
     (see Chapter~\ref{Organization}, Organization, for details on the structure of the tutorial)
-  \item[chapel\_listing.tex] used with the LaTeX `listings` package to properly format Chapel code
-  \item[references.bib] contains bibliography entries for use by `bibtex`
+  \item[chapel\_listing.tex] used with the \latex \verb|listings| package to properly format Chapel code
+  \item[references.bib] contains bibliography entries for use by \verb|bibtex|
 \end{description}
 
-Adapting the associated \LaTeX\xspace files for a new software project is straightforward. 
-Once you've adapted the structure of the \LaTeX\xspace package in the \lstinline{\tutorial} directory for your
+To build the PDF of the tutorial, simply run \verb|make|. The default target in the makefile uses \verb|pdflatex|
+to compile the package:
+\begin{verbatim}
+[./tutorial/] $ make 
+...
+Output written on Numerical_Integration.pdf (43 pages, 306114 bytes).
+Transcript written on Numerical_Integration.log.
+\end{verbatim}
+
+Adapting the associated \latex files for a new software project is straightforward. 
+Once you've adapted the structure of the \latex package in the \path{.\tutorial} directory for your
 purposes, and you've written a decent requirement specification, you're ready to begin the process described in
 Section \ref{tdd-better}. 
 
@@ -282,7 +299,7 @@ The other main concept of literate programming is that the best order to explain
 is not necessarily going to be the same order that the compiler needs to process the code. 
 For example, you might have
 
-\begin{verbatim}
+\begin{chapel}
 proc readInAtoms(filename:string) {
   var infile = open(filename, iomode.r);
   var reader = infile.reader();
@@ -293,7 +310,7 @@ proc readInAtoms(filename:string) {
   readBasis(reader);
 
 }
-\end{verbatim}
+\end{chapel}
 
 When first describing the function of the above block of code, the developer wants to focus on a description of 
 opening the file 

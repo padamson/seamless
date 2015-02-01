@@ -17,15 +17,15 @@ below.
 \textit{Helper (testFunctions.chpl)}. Provide the functions used
 in the tests.
 \begin{chapel}
-  proc f1(x:real):real {
-    return x**3;
-  } 
-  proc f2(x:real):real {
-    return 1/x;
-  } 
-  proc f3(x:real):real {
-    return x;
-  } 
+proc f1(x:real):real {
+  return x**3;
+} 
+proc f2(x:real):real {
+  return 1/x;
+} 
+proc f3(x:real):real {
+  return x;
+} 
 \end{chapel}
 
 \section{Examples}
@@ -39,7 +39,8 @@ an example of an \textit{Example}:
 over the interval $[1.0,4.0]$ using the left rectangle method with 100 subdivisions
 and stores the result in the variable \chpl{result}.
 \begin{chapel}
-  var result: real = leftRectangleIntegration(a = 1.0, b = 4.0, N = 100, f = f1);
+var result: real = leftRectangleIntegration(
+  a = 1.0, b = 4.0, N = 100, f = f1);
 \end{chapel}
 
 \section{Text Boxes}

@@ -3,6 +3,7 @@
 \usepackage{amssymb}
 \usepackage{color}
 \usepackage{times}
+\usepackage{fancyvrb}
 %\usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{listings}
@@ -44,7 +45,7 @@
 \usepackage{xspace}
 \newcommand*{\eg}{\emph{e.g.}\@\xspace}
 \newcommand*{\ie}{\emph{i.e.}\@\xspace}
-\newcommand*{\seamless}{\lstinline{seamless}\@\xspace}
+\newcommand*{\seamless}{\lstinline|seamless|\@\xspace}
 \newcommand*{\latex}{\LaTeX\@\xspace}
 
 \makeatletter
@@ -144,7 +145,7 @@
 \input{Testing_Notes}
 \cleardoublepage
 \markboth{Test-Driven Development with \texttt{seamless}}{Index}
-\input{Numerical_Integration.ind}
+\input{Numerical_Integration.ind}\label{index}
 
 \bibliographystyle{plain}       
 \bibliography{references} 

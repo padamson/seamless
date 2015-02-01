@@ -1,44 +1,29 @@
 \sekshun{Rectangle Integration}
 \label{Rectangle_Integration}
-\index{rectangle integration}
-\index{integration!rectangle}
 
 \begin{seamlessnote}
-Suggestions for Writing Your Specification
+  Now that we have our requirements documented, it is time to enter into the repetitive \seamless
+  TDD cycles necessary to actually document, test, and develop our code. First, some suggestions:
+  \begin{itemize}
+    \item there should be example programs for every package feature
+    \item in explaining a feature, try to address everyone in your audience
+      (e.g. the package developers as well as the black box users)
+    \item explain the syntax of the feature and any implementation details
+    \item explain the impact of the feature and how it is used when piecing together
+      an application
+    \item italicize a term when you are defining it and be sure to add it to the 
+      index (more on index creation below)  
+  \end{itemize}
 
-- There should be example programs for every package concept
-  and for every subsection.
-
-- In explaining a feature, try to address everyone in your audience
-  (e.g. the package developers as well as the black box users).
-  Explain the syntax of
-  the feature and any implementation details.  Also explain the
-  impact of the feature and how it is used when piecing together
-  an application.
-
-- Italicize the term when you are defining it.
-  Be sure to add it to the index.  You want as many things as possible in
-  the index.  (See below for guidance on index term creation.)
-
-
-Index Term Creation
--------------------
-
- - It is better to err on the side of too many entries; you can cull excessive
-   entries later.
-
- - Double-billing is OK, (e.g. `\index{formal arguments}` and `\index{arguments!formal}`)
-
- - An acceptable exception is when these are visually close, so would be noisy
-   (e.g. `\index{operator precedence}` and `\index{operators!precedence}`)
-   In this case, the second form is preferred.
-
- - Global topics can appear at the top level; otherwise, they are qualified by
-   the chapter name (or general topic).
+  In our toy example, we are developing a few numerical integration methods, and we begin with a description
+  of the rectangle method. What follows is a just normal \latex prose including a figure generated in Mathematica
+  to illustrate the concept. It is a good idea to include any external scripts, programs, or spreadsheets used to
+  generate figures for your documentation, and the Mathematica notebook for generating Figure~\ref{fig:rectangle}
+  is included with the tutorial in the \path{./tutorial/Mathematica} directory.
 \end{seamlessnote}
 
-
-The rectangle method computes an approximation to a 
+The \textit{rectangle integration method}\index{rectangle integration method}\index{integration method!rectangle}
+computes an approximation to a 
 definite integral by finding the area of a collection of rectangles whose heights are determined 
 by the values of the function.  Specifically, the interval $[a,b]$ over which the function is to 
 be integrated is divided into $N$ equal subintervals of length $h = (b-a)/N$. The rectangles are 
@@ -54,6 +39,30 @@ where
 \begin{equation}
   h=(b-a)/N  \label{eq:subinterval-width}
 \end{equation}
+
+\begin{seamlessnote}
+  Notice that the term ``rectangle integration method'' above is italicized at its first use. If you look 
+  in the index at the end of the tutorial, you will see two different entries for the term. 
+  One is a plain entry for ``rectangle
+  integration method,'' and the other is a subentry for ``rectangle'' under the ``integration method'' entry. 
+  The index entries are created by inserting \verb|\index| commands in the \latex source and running
+  the \verb|makeindex| command (included for you in the \verb|Makefile|). The plain entry
+  is inserted by simply entering \verb!\index{rectangle integration method}! after the first
+  occurrence of the term. The subentry is inserted by using a \verb|!| to annotate the subentry after the main entry
+  (\eg \verb|\index{integration method!rectangle}|).  Some things to consider with respect to
+  index term creation:
+  \begin{itemize}
+    \item enter as many terms as possible into the index; it is better to err on the side of too 
+      many entries; you can cull excessive entries later
+    \item double-billing is encouraged (\eg \verb|\index{formal arguments}|, 
+      \\ \verb|\index{arguments!formal}|)
+    \item an acceptable exception to double-billing is when the entries are visually close 
+      \\ (\eg \verb|\index{operator precedence}|, \verb|\index{operators!precedence}|), and
+      in this case, the second form is preferred
+    \item global topics can appear at the top level; otherwise, they are qualified by
+      the chapter name (or general topic)
+  \end{itemize}
+\end{seamlessnote}
 
 The formula for $x_n$ for the left, right, and midpoint methods are given in Table \ref{tab:xn-rectangle}.
 As $N$ gets larger, the rectangle method becomes more accurate. This is illustrated in the series of plots
@@ -83,15 +92,16 @@ in Figure \ref{fig:rectangle}.
   The exact value of the integral is 0.70525.}\label{fig:rectangle}
 \end{figure}
 
-\section{Left Rectangle Method}
+\section{Left Rectangle Method}\index{left rectangle method}\index{rectangle method!left}
 \begin{seamlessnote}
-  Now that we've described the rectangle methods fairly well, we will begin developing the code 
-  for the left rectangle version.  The first step is to develop the tests, and
-  every test needs an expected value against which to compare. For our cases, we have the exact
-  values for the integrals, but exact values alone are insufficient to test numerical methods
-  against. We need to understand by how much the output from our functions can deviate from
-  the exact values. Fortunately, the maximum error expressions for these methods are well
-  known.
+  Now that we've described the rectangle method fairly well, including the math for
+  each of the different versions, we will begin developing the code 
+  for the left rectangle method.  The first step is to develop the tests, and
+  every test needs an expected value against which to compare. The obvious way to test the code
+  is to compare results against analytical values. 
+  For the tests specified in \ref{req@4.1}-\ref{req@4.4}, we have analytic values. Also, since
+  the functions are increasing or decreasing over the intervals specified, we can use an expression
+  for the maximum error of the rectangle integration method in our tests.
 \end{seamlessnote}
 
 If $f(x)$ is increasing or decreasing on the interval $[a,b]$, the maximum error $E$ 
@@ -105,50 +115,79 @@ methods using Equation~\ref{eq:lr-rectangle-max-error}. The calculated value wil
 in tests for the left and right rectangle methods to check that the result is within 
 the maximum error expected for a given $a$, $b$, and $N$. 
 \begin{enumspec}
-\item\spec{1} Helper function \lstinline{leftRightRectangleMaxErr} returns the
-  maximum error expected for left or right rectangle method numerical integration. It 
-  takes in a reference to a pre-defined function $f$, the bounds $a$ (real) and $b$ (real) of the 
-  interval for definite integration, and the number $N$ (integer) of subintervals used.
-  The function will be entered in \lstinline{leftRightRectangleMaxErr.chpl}.
+\item\spec{1} Helper function \chpl{leftRightRectangleMaxErr}: compute the maximum error 
+  expected for left or right rectangle method of numerical integration. \\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & maximum error expected 
+      for left or right rectangle method of numerical integration
+      per Equation~\ref{eq:lr-rectangle-max-error} \\ \bottomrule
+  \end{tabular}
 \end{enumspec}
 
 \begin{chapelhelper}{leftRightRectangleMaxErr.chpl}
   \begin{chapel}
-    proc leftRightRectangleMaxErr(a: real, b: real, N: int, f): real{
-      return ((b-a)/N)*abs(f(b)-f(a));
-    }
+proc leftRightRectangleMaxErr(a: real, b: real, N: int, f): real{
+  return ((b-a)/N)*abs(f(b)-f(a));
+}
   \end{chapel}
 \end{chapelhelper}
 
 \begin{seamlessnote}
-  In \lstinline{seamless} vernacular, the helper files are chunks of code that are used to support
-  testing that the developer wants to have outside of the tests. The most likely reason being that
-  the code contains setup or auxiliary functions that are used for multiple tests. In our example
-  above, we are using some foresight and envisioning that the \lstinline{leftRightRectangleMaxErr}
-  function will also be used in a test for the left rectangle numerical integration function. To 
-  extract the helper files from your latex source files, run the following command in the same
-  directory as your latex source:
-  \begin{verbatim}
-  [./tutorial/] $ make helpers
-  \end{verbatim}
-  This command runs the \lstinline{helpers} target in the Makefile at the root of the 
-  tutorial directory (\lstinline{./tutorial/Makefile}. A Makefile is a text 
-    file written in a certain prescribed syntax. Together with the \lstinline{make} utility, it 
-    helps automate repetitive commandline tasks such as building software from its source files. 
-    In this case, the \lstinline{helpers} target cleans out the \lstinline{./tutorial/helper} directory and
-    executes the \lstinline{./util/extract\_helpers} python script with the appropriate arguments.
-  \end{seamlessnote}
+  Our first specification, \ref{spec@1}, was created with the following \latex:
+  \begin{Verbatim}[numbers=left]
+\begin{enumspec}
+\item\spec{1} Helper function \chpl{leftRightRectangleMaxErr}: 
+  compute the maximum error expected for left or right rectangle 
+  method of numerical integration. \\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & maximum error expected 
+      for left or right rectangle method of numerical integration 
+      per Equation~\ref{eq:lr-rectangle-max-error} \\ \bottomrule
+  \end{tabular}
+\end{enumspec}
+\end{Verbatim}
+Each specification is essentially an \verb|item| in an \verb|enumspec| environment, which 
+is defined in the file \path|seamless.sty| and is an extension of the \verb|enumerate| 
+  environment.  The convention in \seamless is that the specifications are numbered 
+  consecutively, and a . , and this ensures that . A 
+reference a given specification, 
 
-  One of the functions that we need to test our methods against is $f(x) = x^3$, 
-  with $a=0$, $b=1$, and $N=100$.
-  Since the function is increasing on the interval $[0,1]$, we can use 
-  the helper function that we just created to compute the maximum expected error. We are
-  ready to create our first test for a function that we will write to compute the definite
-  integral using the left rectangle method. This function will be called 
-  \lstinline{leftRectangleIntegration}
-  and will be written to \lstinline{leftRectangleIntegration.chpl}.
-  Since we know we have four tests to construct (Requirements \ref{req@4.1} through \ref{req@4.4}),
-  we will label the specification for this first test \ref{spec@2}
+  The helper files are chunks of code that are used to support
+  testing that the developer wants to have outside of the tests. The most likely 
+  reason being that
+  the code contains setup or auxiliary functions that are used for multiple tests. In 
+  our example
+  above, we are using some foresight and envisioning that the \chpl{leftRightRectangleMaxErr}
+  function will also be used in a test for the left rectangle numerical integration function. 
+  To extract the helper files from the \latex source files, run the following command in the 
+  directory containing the source:
+\begin{verbatim}
+[./tutorial/] $ make helpers
+\end{verbatim}
+  This command runs the \texttt{helpers} target in the Makefile at the root of the 
+  tutorial directory (\path{./tutorial/Makefile}). A Makefile is a text 
+  file written in a certain prescribed syntax. Together with the \texttt{make} utility, it 
+  helps automate repetitive command-line tasks such as building software from its source files. 
+  In this case, the \texttt{helpers} target cleans out the \path{./tutorial/helper} directory and
+  executes the \path{./util/extract\_helpers} python script with the appropriate arguments.
+\end{seamlessnote}
+
+One of the functions that we need to test our methods against is $f(x) = x^3$, 
+with $a=0$, $b=1$, and $N=100$.
+Since the function is increasing on the interval $[0,1]$, we can use 
+the helper function that we just created to compute the maximum expected error. We are
+ready to create our first test for a function that we will write to compute the definite
+integral using the left rectangle method. This function will be called 
+\chpl{leftRectangleIntegration}
+and will be written to \path{leftRectangleIntegration.chpl}.
   \begin{TODO}
     Add seamless note on how to reference spec's and req's.
   \end{TODO}
@@ -156,7 +195,7 @@ the maximum error expected for a given $a$, $b$, and $N$.
   \begin{enumspec}
   \item\spec{2}
     Test \lstinline{leftRectangleIntegrationTest1.chpl} loads modules
-    \chpl{leftRightRectangleMaxErr} and
+    \texttt{leftRightRectangleMaxErr} and
     \lstinline[breaklines=true]{leftRectangleIntegration}.
     It defines a function \lstinline{f} that takes $x$ (real) and returns $x^3$ (real).
     It passes $a=0.0$, $b=1.0$, $N=100$, and \lstinline{f} to the function
@@ -185,21 +224,22 @@ the maximum error expected for a given $a$, $b$, and $N$.
     \begin{chapelpre}
     \end{chapelpre}
     \begin{chapel}
-      use leftRightRectangleMaxErr;
-      use leftRectangleIntegration;
+use leftRightRectangleMaxErr;
+use leftRectangleIntegration;
 
-      proc f(x:real):real {
-        return x**3;
-      } 
+proc f(x:real):real {
+  return x**3;
+} 
 
-      var calculated:real;
-      var exact:real = 0.25;  // from Mathematica
-      var maximumError:real = leftRightRectangleMaxErr(a = 0.0, b = 1.0, N = 100, f = f);
-      var verified:bool;
+var calculated:real;
+var exact:real = 0.25;  // from Mathematica
+var maximumError:real = leftRightRectangleMaxErr(
+  a = 0.0, b = 1.0, N = 100, f = f);
+var verified:bool;
 
-      calculated = leftRectangleIntegration(a = 0.0, b = 1.0, N = 100, f = f);
-      verified = (abs(calculated - exact) <= maximumError);
-      writeln(verified);
+calculated = leftRectangleIntegration(a = 0.0, b = 1.0, N = 100, f = f);
+verified = (abs(calculated - exact) <= maximumError);
+writeln(verified);
     \end{chapel}
     \begin{chapelpost}
     \end{chapelpost}
@@ -213,10 +253,10 @@ true
     that it does not pass.
     To extract the test from the latex source and run it:
     \begin{verbatim}
-    [./tutorial/] $ make tests
-    [./tutorial/] $ make test
+[./tutorial/] $ make tests
+[./tutorial/] $ make test
     \end{verbatim}
-    These commands run the \lstinline{tests} and \lstinline{test} targets in the same Makefile referenced above.
+    These commands run the \verb|tests| and \verb|test| targets in the same Makefile referenced above.
     In this case, the \lstinline{tests} target cleans out the \lstinline{./tutorial/test} directory and
     executes the \lstinline{./util/extract_tests} python script with the appropriate arguments.
     The \lstinline{test} target changes to the \lstinline{./tutorial/test} directory and 
