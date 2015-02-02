@@ -39,10 +39,9 @@
     numbersep=5pt,
     numberstyle=\tiny,
     numberblanklines=false,
-    stepnumber=0,
+    stepnumber=1,
     escapeinside={(*}{*)},
     language=chapel,
-    alsolanguage=[LaTeX]{TeX}
   }
 
 %\newcommand{\chpl}[1]{\lstinline[language=chapel,basicstyle=\ttfamily,keywordstyle=\bfseries]!#1!}
@@ -51,7 +50,7 @@
 \newcommand{\typename}[1]{\emph{#1}}
 \newcommand{\fnname}[1]{\chpl{#1}}
 
-\lstnewenvironment{chapel}{\lstset{language=chapel,xleftmargin=2pc,stepnumber=0}}{}
+\lstnewenvironment{chapel}{\lstset{language=chapel,xleftmargin=2pc,stepnumber=1}}{}
 %\lstnewenvironment{invisible}{\lstset{language=chapel,xleftmargin=2pc,stepnumber=0,keywordstyle=\bfseries\color{white},basicstyle=\small\ttfamily\color{white}}}{}
 \lstnewenvironment{chapel0}{\lstset{language=chapel,stepnumber=0}}{}
 

@@ -104,8 +104,10 @@ in Figure \ref{fig:rectangle}.
   for the maximum error of the rectangle integration method in our tests.
 \end{seamlessnote}
 
-If $f(x)$ is increasing or decreasing on the interval $[a,b]$, the maximum error $E$ 
-for left or right rectangular numerical integration is given by
+If $f(x)$ is increasing or decreasing on the interval $[a,b]$, the \textit{maximum error}, $E$, 
+for left or right rectangle method numerical integration
+\index{maximum error!left or right rectangle method}\index{left or right rectangle method maximum error}
+  is given by
 \begin{equation}
   E \leq \frac{b-a}{N}\left|f(b)-f(a)\right| \label{eq:lr-rectangle-max-error}
 \end{equation}
@@ -154,11 +156,18 @@ proc leftRightRectangleMaxErr(a: real, b: real, N: int, f): real{
   \end{tabular}
 \end{enumspec}
 \end{Verbatim}
-Each specification is essentially an \verb|item| in an \verb|enumspec| environment, which 
+Each specification is essentially an \verb|item| (see line 2) in an \verb|enumspec| environment, 
+(see lines~1 and 14) which 
 is defined in the file \path|seamless.sty| and is an extension of the \verb|enumerate| 
-  environment.  The convention in \seamless is that the specifications are numbered 
-  consecutively, and a . , and this ensures that . A 
-reference a given specification, 
+  environment.  These \verb|item|'s are labeled using the \verb|\spec{x}| command, where
+  \verb|x| is the desired number in the label (\eg \verb|\spec{27}| to get \textbf{S27}).
+  The convention in \seamless is that the specifications are numbered 
+  consecutively, and they are referenced with the command \verb|\ref{spec@x}|.
+  The appropriate format in which to present the code specification is the developer's
+  choice. As seen in lines 5 through 13 above, the format used in this tutorial is to use
+  the \verb|tabular| environment, with an ``argument'' group and a ``return'' group. As will
+  be seen below, when a specification meets a requirement, another row is added to 
+  annotate this.
 
   The helper files are chunks of code that are used to support
   testing that the developer wants to have outside of the tests. The most likely 
@@ -188,39 +197,36 @@ ready to create our first test for a function that we will write to compute the 
 integral using the left rectangle method. This function will be called 
 \chpl{leftRectangleIntegration}
 and will be written to \path{leftRectangleIntegration.chpl}.
-  \begin{TODO}
-    Add seamless note on how to reference spec's and req's.
-  \end{TODO}
 
   \begin{enumspec}
-  \item\spec{2}
-    Test \lstinline{leftRectangleIntegrationTest1.chpl} loads modules
-    \texttt{leftRightRectangleMaxErr} and
-    \lstinline[breaklines=true]{leftRectangleIntegration}.
-    It defines a function \lstinline{f} that takes $x$ (real) and returns $x^3$ (real).
-    It passes $a=0.0$, $b=1.0$, $N=100$, and \lstinline{f} to the function
-    \lstinline{leftRightRectangleMaxErr} and stores the result in the variable
-    \lstinline{maximumError} (real).
-    It passes $a=0.0$, $b=1.0$, $N=100$, and \lstinline{f} to the function
-    \lstinline{leftRectangleIntegration} and stores the result in the variable
-    \lstinline{calculated}.
-    Variable \lstinline{exact: real} is initialized with the exact value of the integral from
-    Mathematica, 0.25.
-    It then checks to see if the absolute value of the difference between \lstinline{calculated} 
-    and \chpl{exact} is less than or equal to \chpl{maximumError} and sets 
-    \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
-    test results in \lstinline{true}.
-    \meetsreq{4.1}
+  \item\spec{2} Test \chpl{leftRectangleIntegrationTest1}: 
+    integrates the function $x^3$ over the interval
+    $[0,1]$ by the
+    left rectangle numerical integration method with 100 subintervals and verifies
+    that the result is within the expected maximum error of the exact value, 0.25.\\
+    \begin{tabular}{r r p{6cm}} \toprule
+      \textbf{output}      & \chpl{stdout: true}   & test passed \\ 
+                           & \chpl{stdout: false}  & test failed \\ \midrule
+      \textbf{modules loaded}     & \multicolumn{2}{l}{\chpl{leftRightRectangleMaxErr}} \\
+                                  & \multicolumn{2}{l}{\chpl{leftRectangleIntegration}} \\ \midrule
+      \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{4.1}} \\ \midrule
+  \end{tabular}
   \end{enumspec}
 
-  \begin{TODO}
-    Refactor \lstinline{chapelexample} environment to \lstinline{chapeltest} environment or
-    a more general \lstinline{test} environment. (Similarly for \lstinline{chapelsource} and
-    \lstinline{chapelhelper} environs.)
-  \end{TODO}
+  \begin{seamlessnote}
+    The first test specification, \ref{spec@2}, differs quite a bit from \ref{spec@1}, which was
+    for a helper function. This first test is an executable to be compiled and run without any 
+    input, and the output is written to \chpl{stdout}, Therefore, we have a row for the 
+    potential outputs, but not input, arguments, or a return value. We also load two modules
+    in this test, so there is a row to annotate those.  Finally, this test meets one of the
+    requirements, \ref{req@4.1}, and that fact is annotated in the ``requirements met'' row.
+    To annotate this, we use the command \verb|\meetsreq{x}|, where \verb|x| is the number of the
+    requirement that is met (\eg \verb|\meetsreq{4.1}| to annotate that Requirement~\textbf{R4.1}
+    is met).
+  \end{seamlessnote}
 
   \begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
-    A test for \lstinline{leftRectangleIntegration}.
+    A test for function \chpl{leftRectangleIntegration} using $f(x) = x^3$.
     \begin{chapelpre}
     \end{chapelpre}
     \begin{chapel}
@@ -232,12 +238,13 @@ proc f(x:real):real {
 } 
 
 var calculated:real;
-var exact:real = 0.25;  // from Mathematica
+var exact:real = 0.25;
 var maximumError:real = leftRightRectangleMaxErr(
   a = 0.0, b = 1.0, N = 100, f = f);
 var verified:bool;
 
-calculated = leftRectangleIntegration(a = 0.0, b = 1.0, N = 100, f = f);
+calculated = leftRectangleIntegration(
+  a = 0.0, b = 1.0, N = 100, f = f);
 verified = (abs(calculated - exact) <= maximumError);
 writeln(verified);
     \end{chapel}
@@ -249,6 +256,51 @@ true
   \end{chapelexample}
 
   \begin{seamlessnote}
+    The above test is inserted with the following \latex code:
+    \begin{Verbatim}[numbers=left]
+\begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
+  A test for function \chpl{leftRectangleIntegration}.
+  \begin{chapelpre}
+  \end{chapelpre}
+  \begin{chapel}
+use leftRightRectangleMaxErr;
+use leftRectangleIntegration;
+
+proc f(x:real):real {
+  return x**3;
+} 
+
+var calculated:real;
+var exact:real = 0.25;
+var maximumError:real = leftRightRectangleMaxErr(
+  a = 0.0, b = 1.0, N = 100, f = f);
+var verified:bool;
+
+calculated = leftRectangleIntegration(
+  a = 0.0, b = 1.0, N = 100, f = f);
+verified = (abs(calculated - exact) <= maximumError);
+writeln(verified);
+  \end{chapel}
+  \begin{chapelpost}
+  \end{chapelpost}
+  \begin{chapeloutput}
+true
+  \end{chapeloutput}
+ \end{chapelexample}
+\end{Verbatim}
+    Tests are inserted within \verb|chapelexample| environments (see lines~1 and~29). The option
+    passed to the environment is the filename for the test. Each test is given a unique filename.
+    The text following the \verb|\begin{chapelexample}| command is printed in the PDF, but is 
+      discarded when the test is extracted from the \latex source.  Inside the \verb|chapelexample|
+      environment, four other environments are declared: 
+      \begin{itemize}
+        \item \verb|chapelpre|: code inserted at beginning of the test but not printed in the PDF
+        \item \verb|chapel|: test code
+        \item \verb|chapelpost|: code inserted at end of test but not printed in the PDF
+        \item \verb|chapeloutput|: \chpl{stdout} output for a passed test; text is extracted to a file
+          with the same base filename as the test with a \path{.good} extension
+      \end{itemize}
+
     Now that we have our first test written, we need to extract it from the latex source and verify
     that it does not pass.
     To extract the test from the latex source and run it:
@@ -257,75 +309,108 @@ true
 [./tutorial/] $ make test
     \end{verbatim}
     These commands run the \verb|tests| and \verb|test| targets in the same Makefile referenced above.
-    In this case, the \lstinline{tests} target cleans out the \lstinline{./tutorial/test} directory and
-    executes the \lstinline{./util/extract_tests} python script with the appropriate arguments.
-    The \lstinline{test} target changes to the \lstinline{./tutorial/test} directory and 
-    executes the \lstinline{start_test} csh script that comes with
-    the chapel distribution (in \lstinline{CHPL_HOME/util}). The script compiles and executes each of the
+    In this case, the \verb|tests| target cleans out the \path{./tutorial/test} directory and
+    executes the \path{./util/extract_tests} python script with the appropriate arguments.
+    The \verb|test| target changes to the \path{./tutorial/test} directory and 
+    executes the \verb|start_test| script that comes with
+    the chapel distribution (in the \path{CHPL_HOME/util} directory). The script compiles 
+      and executes each of the
     chapel source files in the test directory 
-    (\eg \lstinline{leftRectangleIntegrationTest.chpl} as in the example above) 
-    and compares the output with the contents of a file with a \lstinline{.good} extension
-    (\eg \lstinline{leftRectangleIntegrationTest.good} for the above test). 
+    (\eg \path{leftRectangleIntegrationTest1.chpl} as in the example above) 
+    and compares the output with the contents of a file with a \path{.good} extension
+    (\eg \path{leftRectangleIntegrationTest1.good} for the above test). 
     The last few lines of output should look something like this:
     \begin{verbatim}
-    [Test Summary - 150107.202408]
-    [Summary: #Successes = 0 | #Failures = 1 | #Futures = 0 | #Warnings = 0 ]
-    [END]
+[Test Summary - 150107.202408]
+[Summary: #Successes = 0 | #Failures = 1 | #Futures = 0 | #Warnings = 0 ]
+[END]
     \end{verbatim}
   \end{seamlessnote}
 
   \begin{TODO}
     Update test target to run all targets necessary to run tests.
   \end{TODO}
+  \begin{TODO}
+    Refactor \verb|chapelexample| environment to \verb|test|.  (Similarly for 
+      \verb|chapelsource| and \verb|chapelhelper| environments.)
+  \end{TODO}
+  \begin{TODO}
+    Add option to gobble spaces on left side in \verb|chapelexample| so that code can be
+    indented in source.
+  \end{TODO}
 
-  The code that provides the \lstinline{leftRectangleIntegration} function is straightforward.
+  The code that provides the \chpl{leftRectangleIntegration} function is straightforward.
   \begin{enumspec}
-  \item\spec{3} Function \lstinline{leftRectangleIntegration}, for an interval
-    of integration, $[a,b]$,
-    takes the left end value of the interval, \lstinline{a: real}, the right end value
-    of the interval, \lstinline{b: real}, the number of subintervals for the numerical
-    integration, \lstinline{N: int}, and the function to be integrated, \lstinline{f}.
-    The function stores the width of the subinterval calculated from Equation 
-    \ref{eq:subinterval-width} in the variable \lstinline{h: real}. It initializes the variable
-    \lstinline{sum: real} to zero, and for each value of $n$ in the summation of Equation~\ref{eq:rectangle},
-    it computes \lstinline{x_n: real} according to the expression in Table~\ref{tab:xn-rectangle} and adds
-    the value of \lstinline{f(x_n)} to \lstinline{sum: real}. The function returns the product of 
-    \lstinline{sum: real} and the subinterval width, \lstinline{h: real}.
-    \meetsreq{1.1,2,3}
+  \item\spec{3} Function \chpl{leftRectangleIntegration}: 
+    integrates a function by the left rectangle method of numerical integration.\\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & definite integral 
+      computed by left rectangle method of numerical integration
+      per Equations~\ref{eq:rectangle} and \ref{eq:subinterval-width} 
+      and the appropriate expression for $x_n$ in Table~\ref{tab:xn-rectangle}\\ \bottomrule
+    \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{1.1,2,3}} \\ \midrule
+  \end{tabular}
   \end{enumspec}
 
   \begin{chapelsource}{leftRectangleIntegration.chpl}
     \begin{chapel}
-      proc leftRectangleIntegration(a: real(64), b: real(64), N: int(64), f): real(64){
-        var h: real(64) = (b - a)/N; 
-        var sum: real(64) = 0.0;
-        var x_n: real(64);
-        for n in 0..N-1 {
-          x_n = a + n * h;
-          sum = sum + f(x_n);
-        }
-        return h * sum;
-      }
+proc leftRectangleIntegration(a: real, b: real, N: int, f): real{
+  var h: real = (b - a)/N; 
+  var sum: real = 0.0;
+  var x_n: real;
+  for n in 0..N-1 {
+    x_n = a + n * h;
+    sum = sum + f(x_n);
+  }
+  return h * sum;
+}
     \end{chapel}
   \end{chapelsource}
 
   \begin{seamlessnote}
-    We can now verify that test \lstinline{leftRectangleIntegrationTest1.chpl} passes. First
-    we need to extract the chapel source from our latex file and then run the test that was
+    Our first chunk of source code is inserted with the following \latex source:
+    \begin{Verbatim}[numbers=left,gobble=6]
+      \begin{chapelsource}{leftRectangleIntegration.chpl}
+        \begin{chapel}
+          proc leftRectangleIntegration(
+            a: real, b: real, N: int, f): real{
+            var h: real = (b - a)/N; 
+            var sum: real = 0.0;
+            var x_n: real;
+            for n in 0..N-1 {
+              x_n = a + n * h;
+              sum = sum + f(x_n);
+            }
+            return h * sum;
+          }
+        \end{chapel}
+      \end{chapelsource}
+    \end{Verbatim}
+    The source is specified in a \verb|chapel| environment (see lines~2 and~14) within 
+    a \verb|chapelsource| environment (see lines~1 and~15). The option passed to the
+    \verb|\begin{chapelsource}| command specifies the file in which the source is placed.
+    Multiple chunks of source can be extracted into a given source file.
+
+    We can now verify that test \path{leftRectangleIntegrationTest1} passes. First
+    we need to extract the chapel source from our \latex file and then run the test that was
     written previously:
-    \begin{verbatim}
-  [./tutorial/] $ make sources
-  [./tutorial/] $ make test
-  \end{verbatim}
-  These commands run the \lstinline{sources} and \lstinline{test} targets in our Makefile.
-  In this case, the \lstinline{sources} target cleans out the \lstinline{./tutorial/source} directory and
-  executes the \lstinline{./util/extract_sources} python script with the appropriate arguments, putting
-  the source code that we've defined in our latex file into the \lstinline{./tutorial/source} directory.
-  The last few lines of output should look something like this:
   \begin{verbatim}
-  [Test Summary - 150107.202408]
-  [Summary: #Successes = 1 | #Failures = 0 | #Futures = 0 | #Warnings = 0 ]
-  [END]
+[./tutorial/] $ make sources
+[./tutorial/] $ make test
+  \end{verbatim}
+  These commands run the \verb|sources| and \verb|test| targets in the Makefile.
+  In this case, the \verb|sources| target cleans out the \path{./tutorial/source} directory and
+  executes the \path{./util/extract_sources} python script with the appropriate arguments, putting
+  the source code that we've defined in our latex file into the \path{./tutorial/source} directory.
+  The last few lines of output should now look something like this:
+  \begin{verbatim}
+[Test Summary - 150107.202408]
+[Summary: #Successes = 1 | #Failures = 0 | #Futures = 0 | #Warnings = 0 ]
+[END]
   \end{verbatim}
 \end{seamlessnote}
 
@@ -338,42 +423,39 @@ maximum expected error.
 Our second test 
 for the left rectangle method is very similar to the first. 
 \begin{enumspec}
-\item\spec{4}
-  Test \lstinline{leftRectangleIntegrationTest2.chpl} loads modules
-  \lstinline{leftRightRectangleMaxErr} and
-  \lstinline{leftRectangleIntegration}.
-  It defines a function \lstinline{f} that takes \lstinline{x: real} and returns $1/x$.
-  It passes $a=1.0$, $b=100.0$, $N=1000$, and \lstinline{f} to the function
-  \lstinline{leftRightRectangleMaxErr} and stores the result in the variable
-  \lstinline{maximumError} (real).
-  It passes $a=1.0$, $b=100.0$, $N=1000$, and \lstinline{f} to the function
-  \lstinline{leftRectangleIntegration} and stores the result in the variable
-  \lstinline{calculated}.
-  Variable \lstinline{exact: real} is initialized with the exact value of the integral, 4.605170.
-  It then checks to see if the absolute value of the difference between \lstinline{calculated} 
-  and \lstinline{exact} is less than or equal to \lstinline{maximumError} and sets 
-  \lstinline{verified: bool}. The test writes out \lstinline{verified} and a passing
-  test results in \lstinline{true}.
-  \meetsreq{4.2}
+\item\spec{4} Test \chpl{leftRectangleIntegrationTest2.chpl}: 
+    integrates the function $1/x$ over the interval
+    $[1,100]$ by the
+    left rectangle numerical integration method with 1000 subintervals and verifies
+    that the result is within the expected maximum error of the exact value, $ln(100)$.\\
+    \begin{tabular}{r r p{6cm}} \toprule
+      \textbf{output}      & \chpl{stdout: true}   & test passed \\ 
+                           & \chpl{stdout: false}  & test failed \\ \midrule
+      \textbf{modules loaded}     & \multicolumn{2}{l}{\chpl{leftRightRectangleMaxErr}} \\
+                                  & \multicolumn{2}{l}{\chpl{leftRectangleIntegration}} \\ \midrule
+      \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{4.2}} \\ \midrule
+  \end{tabular}
 \end{enumspec}
 
 \begin{chapelexample}{leftRectangleIntegrationTest2.chpl}
-  A test for \lstinline{leftRectangleIntegration} using $f(x) = 1/x$.
+  A test for function \chpl{leftRectangleIntegration} using $f(x) = 1/x$.
   \begin{chapelpre}
   \end{chapelpre}
   \begin{chapel}
-    use leftRightRectangleMaxErr;
-    use leftRectangleIntegration;
+use leftRightRectangleMaxErr;
+use leftRectangleIntegration;
 
-    proc f(x:real):real {
-      return 1/x;
-    } 
+proc f(x:real):real {
+  return 1/x;
+} 
 
-    var exact:real = 4.605170; 
-    var maximumError:real = leftRightRectangleMaxErr(a = 1.0, b = 100.0, N = 1000, f = f);
-    var calculated: real = leftRectangleIntegration(a = 1.0, b = 100.0, N = 1000, f = f);
-    var verified: bool = (abs(calculated - exact) <= maximumError);
-    writeln(verified);
+var exact:real = 4.605170; 
+var maximumError:real = 
+  leftRightRectangleMaxErr(a = 1.0, b = 100.0, N = 1000, f = f);
+var calculated: real = 
+  leftRectangleIntegration(a = 1.0, b = 100.0, N = 1000, f = f);
+var verified: bool = (abs(calculated - exact) <= maximumError);
+writeln(verified);
   \end{chapel}
   \begin{chapelpost}
   \end{chapelpost}
@@ -386,9 +468,9 @@ true
   By now you have likely realized that we already have some opportunities to refactor code in
   our first two tests above. The tests are very similar except for the expressions in the 
   test function ($f$), the exact values for the integrals, and the values of $a$, $b$, and $N$
-  passed to \lstinline{leftRightRectangleMaxErr} and \lstinline{leftRectangleIntegration}.
+  passed to \chpl{leftRightRectangleMaxErr} and \chpl{leftRectangleIntegration}.
   Also, you'll notice that the arguments to 
-  \lstinline{leftRightRectangleMaxErr} and \lstinline{leftRectangleIntegration}
+  \chpl{leftRightRectangleMaxErr} and \chpl{leftRectangleIntegration}
   are identical, and perhaps it would be good to always get the maximum error associated with a
   numerical integration.
   We will rewrite our integration function to return the value of the integral and
@@ -406,6 +488,22 @@ true
   Add description of versioning with git.
 \end{TODO}
 
+\begin{enumspec}
+\item\spec{5} Helper \chpl{testFunctions.chpl}: 
+  provide the functions $f(x) \in \{x^3, 1/x, x\}$ for use in tests. \\
+  \begin{tabular}{r r l} \toprule
+    \textbf{proc f1} & & \\ \midrule
+    \textbf{arguments} & \chpl{x:real} & $x$ \\ \midrule
+    \textbf{return}    & \chpl{:real}  & $x^3$ \\ \bottomrule
+    \textbf{proc f2} & & \\ \midrule
+    \textbf{arguments} & \chpl{x:real} & $x$ \\ \midrule
+    \textbf{return}    & \chpl{:real}  & $1/x$ \\ \bottomrule
+    \textbf{proc f3} & & \\ \midrule
+    \textbf{arguments} & \chpl{x:real} & $x$ \\ \midrule
+    \textbf{return}    & \chpl{:real}  & $x$ \\ \bottomrule
+  \end{tabular}
+\end{enumspec}
+
 \begin{chapelhelper}{testFunctions.chpl}
   \begin{chapel}
     proc f1(x:real):real {
@@ -420,33 +518,49 @@ true
   \end{chapel}
 \end{chapelhelper}
 
+  \begin{enumspec}
+  \item\spec{6} Test \chpl{leftRectangleIntegrationTest3}: 
+    integrates test functions according to Requirements~\ref{req@4.1} through~\ref{req@4.4}.\\
+    \begin{tabular}{r r p{6cm}} \toprule
+      \textbf{output} x 4  & \chpl{stdout: true}   & test passed \\ 
+                           & \chpl{stdout: false}  & test failed \\ \midrule
+      \textbf{modules loaded} & \multicolumn{2}{l}{\chpl{testFunctions}} \\
+                              & \multicolumn{2}{l}{\chpl{leftRectangleIntegrationWithErr}} \\ \midrule
+      \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{4.1,4.2,4.3,4.4}} \\ \bottomrule
+  \end{tabular}
+  \end{enumspec}
+
 \begin{chapelexample}{leftRectangleIntegrationTest3.chpl}
-  A test for \lstinline{leftRectangleIntegration} using $f(x) = \{x^3, 1/x, x\}$.
+  A test for \chpl{leftRectangleIntegrationWithErr} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
   \begin{chapel}
-    use leftRectangleIntegrationWithErr;
-    use testFunctions;
+use leftRectangleIntegrationWithErr;
+use testFunctions;
 
-    var exact:real;
-    var calculated:real;
-    var maxErr:real;
+var exact:real;
+var calculated:real;
+var maxErr:real;
 
-    exact = 0.25;
-    (maxErr, calculated) = leftRectangleIntegrationWithErr(a = 0.0, b = 1.0, N = 100, f = f1);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 0.25;
+(maxErr, calculated) = leftRectangleIntegrationWithErr(
+  a = 0.0, b = 1.0, N = 100, f = f1);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 4.605170;
-    (maxErr, calculated) = leftRectangleIntegrationWithErr(a = 1.0, b = 100.0, N = 1000, f = f2);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 4.605170;
+(maxErr, calculated) = leftRectangleIntegrationWithErr(
+  a = 1.0, b = 100.0, N = 1000, f = f2);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 12500000;
-    (maxErr, calculated) = leftRectangleIntegrationWithErr(a = 0.0, b = 5000.0, N = 5000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 12500000;
+(maxErr, calculated) = leftRectangleIntegrationWithErr(
+  a = 0.0, b = 5000.0, N = 5000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 18000000;
-    (maxErr, calculated) = leftRectangleIntegrationWithErr(a = 0.0, b = 6000.0, N = 6000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 18000000;
+(maxErr, calculated) = leftRectangleIntegrationWithErr(
+  a = 0.0, b = 6000.0, N = 6000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
   \end{chapel}
   \begin{chapelpost}
   \end{chapelpost}
@@ -458,70 +572,91 @@ true
   \end{chapeloutput}
 \end{chapelexample}
 
-The code that provides the \lstinline{leftRectangleIntegrationWithErr} function is straightforward.
 \begin{enumspec}
-\item\spec{5} Function \lstinline{leftRectangleIntegrationWithErr}, for an interval
-  of integration, $[a,b]$,
-  takes the left end value of the interval, \lstinline{a: real}, the right end value
-  of the interval, \lstinline{b: real}, the number of subintervals for the numerical
-  integration, \lstinline{N: int}, and the function to be integrated, \lstinline{f}.
-  The function stores the width of the subinterval calculated from Equation 
-  \ref{eq:subinterval-width} in the variable \lstinline{h: real}. It initializes the variable
-  \lstinline{sum: real} to zero, and for each value of $n$ in the summation of Equation~\ref{eq:rectangle},
-  it computes \lstinline{x_n: real} according to the expression in Table~\ref{tab:xn-rectangle} and adds
-  the value of \lstinline{f(x_n)} to \lstinline{sum: real}. The function returns the product of 
-  \lstinline{sum: real} and the subinterval width, \lstinline{h: real} as the first element of a two-element
-  tuple..
-  The second element of the returned tuple is the
-  maximum error expected calculated according to equation \ref{eq:lr-rectangle-max-error}.
-  \meetsreq{1,5,5.1}
+\item\spec{7} Function \chpl{leftRectangleIntegrationWithErr}: 
+  computes the definite integral of a function by the left rectangle
+    method of numerical integration. Also computes the maximum expected error.\\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & definite integral 
+      computed by left rectangle method of numerical integration
+      per Equations~\ref{eq:rectangle} and \ref{eq:subinterval-width} 
+      and the appropriate expression for $x_n$ in Table~\ref{tab:xn-rectangle}
+      is first element of two-element tuple\\ 
+                       & \chpl{:real}  & maximum error expected 
+      per Equation~\ref{eq:lr-rectangle-max-error} is second element of two-element
+      tuple \\ \midrule
+    \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{1.1,2,3}} \\ \bottomrule
+  \end{tabular}
 \end{enumspec}
 
 \begin{chapelsource}{leftRectangleIntegrationWithErr.chpl}
   \begin{chapel}
-    proc leftRectangleIntegrationWithErr(a: real(64), b: real(64), N: int(64), f): 2*real{
-      var maxErr: real = ((b-a)/N)*abs(f(b)-f(a));
-      var h: real(64) = (b - a)/N; 
-      var sum: real(64) = 0.0;
-      var x_n: real(64);
-      for n in 0..N-1 {
-        x_n = a + n * h;
-        sum = sum + f(x_n);
-      }
-      return (h * sum, maxErr);
-    }
+proc leftRectangleIntegrationWithErr(
+  a: real, b: real, N: int, f): 2*real{
+  var maxErr: real = ((b-a)/N)*abs(f(b)-f(a));
+  var h: real = (b - a)/N; 
+  var sum: real = 0.0;
+  var x_n: real;
+  for n in 0..N-1 {
+    x_n = a + n * h;
+    sum = sum + f(x_n);
+  }
+  return (h * sum, maxErr);
+}
   \end{chapel}
 \end{chapelsource}
 
 \section{Right Rectangle Method}
 
+  \begin{enumspec}
+  \item\spec{8} Test \chpl{rightRectangleIntegrationTest}: 
+    integrates test functions according to Requirements~\ref{req@4.1} through~\ref{req@4.4}
+    using the right rectangle numerical integration method and compares results
+    to expected maximum error.\\
+    \begin{tabular}{r r p{6cm}} \toprule
+      \textbf{output} x 4  & \chpl{stdout: true}   & test passed \\ 
+                           & \chpl{stdout: false}  & test failed \\ \midrule
+      \textbf{modules loaded} & \multicolumn{2}{l}{\chpl{testFunctions}} \\
+                              & \multicolumn{2}{l}{\chpl{rightRectangleIntegrationWithErr}} \\ \midrule
+      \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{4.1,4.2,4.3,4.4}} \\ \bottomrule
+  \end{tabular}
+  \end{enumspec}
+
 \begin{chapelexample}{rightRectangleIntegrationTest.chpl}
-  A test for \lstinline{rightRectangleIntegrationWithErr} using $f(x) = \{x^3, 1/x, x\}$.
+  A test for \lstinline{rightRectangleIntegrationWithErr} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
   \begin{chapel}
-    use rightRectangleIntegrationWithErr;
-    use testFunctions;
+use rightRectangleIntegrationWithErr;
+use testFunctions;
 
-    var exact:real;
-    var calculated:real;
-    var maxErr:real;
+var exact:real;
+var calculated:real;
+var maxErr:real;
 
-    exact = 0.25;
-    (maxErr, calculated) = rightRectangleIntegrationWithErr(a = 0.0, b = 1.0, N = 100, f = f1);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 0.25;
+(maxErr, calculated) = rightRectangleIntegrationWithErr(
+  a = 0.0, b = 1.0, N = 100, f = f1);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 4.605170;
-    (maxErr, calculated) = rightRectangleIntegrationWithErr(a = 1.0, b = 100.0, N = 1000, f = f2);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 4.605170;
+(maxErr, calculated) = rightRectangleIntegrationWithErr(
+  a = 1.0, b = 100.0, N = 1000, f = f2);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 12500000;
-    (maxErr, calculated) = rightRectangleIntegrationWithErr(a = 0.0, b = 5000.0, N = 5000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 12500000;
+(maxErr, calculated) = rightRectangleIntegrationWithErr(
+  a = 0.0, b = 5000.0, N = 5000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 18000000;
-    (maxErr, calculated) = rightRectangleIntegrationWithErr(a = 0.0, b = 6000.0, N = 6000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 18000000;
+(maxErr, calculated) = rightRectangleIntegrationWithErr(
+  a = 0.0, b = 6000.0, N = 6000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
   \end{chapel}
   \begin{chapelpost}
   \end{chapelpost}
@@ -533,19 +668,41 @@ true
   \end{chapeloutput}
 \end{chapelexample}
 
+\begin{enumspec}
+\item\spec{9} Function \chpl{rightRectangleIntegrationWithErr}: 
+  computes the definite integral of a function by the right rectangle
+    method of numerical integration. Also computes the maximum expected error.\\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & definite integral 
+      computed by right rectangle method of numerical integration
+      per Equations~\ref{eq:rectangle} and \ref{eq:subinterval-width} 
+      and the appropriate expression for $x_n$ in Table~\ref{tab:xn-rectangle}
+      is first element of two-element tuple\\ 
+                       & \chpl{:real}  & maximum error expected 
+      per Equation~\ref{eq:lr-rectangle-max-error} is second element of two-element
+      tuple \\ \midrule
+    \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{1.2,2,3}} \\ \bottomrule
+  \end{tabular}
+\end{enumspec}
+
 \begin{chapelsource}{rightRectangleIntegrationWithErr.chpl}
   \begin{chapel}
-    proc rightRectangleIntegrationWithErr(a: real(64), b: real(64), N: int(64), f): 2*real{
-      var maxErr: real = ((b-a)/N)*abs(f(b)-f(a));
-      var h: real(64) = (b - a)/N; 
-      var sum: real(64) = 0.0;
-      var x_n: real(64);
-      for n in 0..N-1 {
-        x_n = a + (n + 1) * h;
-        sum = sum + f(x_n);
-      }
-      return (h * sum, maxErr);
-    }
+proc rightRectangleIntegrationWithErr(
+  a: real, b: real, N: int, f): 2*real{
+  var maxErr: real = ((b-a)/N)*abs(f(b)-f(a));
+  var h: real = (b - a)/N; 
+  var sum: real = 0.0;
+  var x_n: real;
+  for n in 0..N-1 {
+    x_n = a + (n + 1) * h;
+    sum = sum + f(x_n);
+  }
+  return (h * sum, maxErr);
+}
   \end{chapel}
 \end{chapelsource}
 
@@ -553,14 +710,15 @@ true
 For a function $f$ which is twice differentiable, the maximum error $E$ for the
 midpoint rectangle method is given by the following equation:
 \begin{equation}
-  E \leq \frac{(b-a)^3}{24 N^2} f''(\xi) \label{eq:rectangle-max-error}
+  E \leq \frac{(b-a)^3}{24 N^2} f''(\xi) \label{eq:mp-rectangle-max-error}
 \end{equation}
 for some $\xi$ in $[a,b]$.
 
-Unlike the left and right rectangle methods, it is very difficult to write a function
-to determine the maximum expected error. First, we must determine the maximum value of
+Unlike the left and right rectangle methods, it is more difficult to write a function
+to determine the maximum expected error for the midpoint version. First, we must 
+determine the maximum value of
 the second derivative before we can compute the maximum error using 
-Equation~\ref{eq:rectangle-max-error}. 
+Equation~\ref{eq:mp-rectangle-max-error}. 
 For $f(x) = x^3$, the second derivative is $f''(x) = 6x$. On the interval specified by
 Requirement~\ref{req@4.1}, $[0,1]$, the maximum value is $f''(1) = 6$.
 For $f(x) = 1/x$, the second derivative is $f''(x) = 2x^{-3}$. On the interval specified by
@@ -573,8 +731,9 @@ The calculated maximum expected error for the tests specified in Requirements~\r
 
 \begin{table}[htbp]
   \centering
-  \caption{Values for expressions in Equation~\ref{eq:rectangle-max-error} and the maximum 
-    expected error of the midpoint rectangle method of numerical integration for $f(x) = \{x^3, 1/x\}$.}
+  \caption{Values for expressions in Equation~\ref{eq:mp-rectangle-max-error} and the maximum 
+    expected error of the midpoint rectangle method of numerical integration for 
+    $f(x) \in \{x^3, 1/x\}$.}
   \label{tab:midpoint-rectangle-error}
   \begin{tabular}{ccccc}
     \textbf{Function} & \textbf{Interval} & \textbf{N} & \textbf{Maximum $f''(x)$} & $E$  \\ \toprule
@@ -583,37 +742,55 @@ The calculated maximum expected error for the tests specified in Requirements~\r
   \end{tabular}
 \end{table}
 
+  \begin{enumspec}
+  \item\spec{10} Test \chpl{midpointRectangleIntegrationTest}: 
+    integrates test functions according to Requirements~\ref{req@4.1} through~\ref{req@4.4}
+    using the midpoint rectangle numerical integration method and compares results
+    to the maximum expected error.\\
+    \begin{tabular}{r r p{6cm}} \toprule
+      \textbf{output} x 4  & \chpl{stdout: true}   & test passed \\ 
+                           & \chpl{stdout: false}  & test failed \\ \midrule
+      \textbf{modules loaded} & \multicolumn{2}{l}{\chpl{testFunctions}} \\
+                              & \multicolumn{2}{l}{\chpl{midpointRectangleIntegration}} \\ \midrule
+      \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{4.1,4.2,4.3,4.4}} \\ \bottomrule
+  \end{tabular}
+  \end{enumspec}
+
 \begin{chapelexample}{midpointRectangleIntegrationTest.chpl}
-  A test for \lstinline{midpointRectangleIntegrationWithErr} using $f(x) = \{x^3, 1/x, x\}$.
+  A test for \lstinline{midpointRectangleIntegration} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
   \begin{chapel}
-    use midpointRectangleIntegrationWithErr;
-    use testFunctions;
+use midpointRectangleIntegration;
+use testFunctions;
 
-    var exact:real;
-    var calculated:real;
-    var maxErr:real;
+var exact:real;
+var calculated:real;
+var maxErr:real;
 
-    exact = 0.25;
-    maxErr = 0.000025;
-    calculated = midpointRectangleIntegrationWithErr(a = 0.0, b = 1.0, N = 100, f = f1);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 0.25;
+maxErr = 0.000025;
+calculated = midpointRectangleIntegration(
+  a = 0.0, b = 1.0, N = 100, f = f1);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 4.605170;
-    maxErr = 0.121287;
-    calculated = midpointRectangleIntegrationWithErr(a = 1.0, b = 100.0, N = 1000, f = f2);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 4.605170;
+maxErr = 0.121287;
+calculated = midpointRectangleIntegration(
+  a = 1.0, b = 100.0, N = 1000, f = f2);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 12500000;
-    maxErr = 0.00001;
-    calculated = midpointRectangleIntegrationWithErr(a = 0.0, b = 5000.0, N = 5000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 12500000;
+maxErr = 0.00001;
+calculated = midpointRectangleIntegration(
+  a = 0.0, b = 5000.0, N = 5000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
 
-    exact = 18000000;
-    maxErr = 0.00001;
-    calculated = midpointRectangleIntegrationWithErr(a = 0.0, b = 6000.0, N = 6000000, f = f3);
-    writeln((abs(calculated - exact) <= maxErr));
+exact = 18000000;
+maxErr = 0.00001;
+calculated = midpointRectangleIntegration(
+  a = 0.0, b = 6000.0, N = 6000000, f = f3);
+writeln((abs(calculated - exact) <= maxErr));
   \end{chapel}
   \begin{chapelpost}
   \end{chapelpost}
@@ -625,17 +802,35 @@ true
   \end{chapeloutput}
 \end{chapelexample}
 
-\begin{chapelsource}{midpointRectangleIntegrationWithErr.chpl}
+\begin{enumspec}
+\item\spec{11} Function \chpl{midpointRectangleIntegration}: 
+  computes the definite integral of a function by the midpoint rectangle
+  method of numerical integration.\\
+  \begin{tabular}{r r p{10cm}} \toprule
+    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
+                       & \chpl{b:real} & upper bound \\ 
+                       & \chpl{N:int}  & number of subintervals \\ 
+                       & \chpl{f}      & function \\ \midrule
+    \textbf{return}    & \chpl{:real}  & definite integral 
+      computed by midpoint rectangle method of numerical integration
+      per Equations~\ref{eq:rectangle} and \ref{eq:subinterval-width} 
+      and the appropriate expression for $x_n$ in Table~\ref{tab:xn-rectangle}\\
+    \textbf{requirements met} & \multicolumn{2}{l}{\meetsreq{1.3,2,3}} \\ \bottomrule
+  \end{tabular}
+\end{enumspec}
+
+\begin{chapelsource}{midpointRectangleIntegration.chpl}
   \begin{chapel}
-    proc midpointRectangleIntegrationWithErr(a: real(64), b: real(64), N: int(64), f): real{
-      var h: real(64) = (b - a)/N; 
-      var sum: real(64) = 0.0;
-      var x_n: real(64);
-      for n in 0..N-1 {
-        x_n = a + (n + 0.5) * h;
-        sum = sum + f(x_n);
-      }
-      return h * sum;
-    }
+proc midpointRectangleIntegration(
+  a: real, b: real, N: int, f): real{
+  var h: real = (b - a)/N; 
+  var sum: real = 0.0;
+  var x_n: real;
+  for n in 0..N-1 {
+    x_n = a + (n + 0.5) * h;
+    sum = sum + f(x_n);
+  }
+  return h * sum;
+}
   \end{chapel}
 \end{chapelsource}
