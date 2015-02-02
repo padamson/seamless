@@ -139,23 +139,8 @@ proc leftRightRectangleMaxErr(a: real, b: real, N: int, f): real{
 \end{chapelhelper}
 
 \begin{seamlessnote}
-  Our first specification, \ref{spec@1}, was created with the following \latex:
-  \begin{Verbatim}[numbers=left]
-\begin{enumspec}
-\item\spec{1} Helper function \chpl{leftRightRectangleMaxErr}: 
-  compute the maximum error expected for left or right rectangle 
-  method of numerical integration. \\
-  \begin{tabular}{r r p{10cm}} \toprule
-    \textbf{arguments} & \chpl{a:real} & lower bound \\ 
-                       & \chpl{b:real} & upper bound \\ 
-                       & \chpl{N:int}  & number of subintervals \\ 
-                       & \chpl{f}      & function \\ \midrule
-    \textbf{return}    & \chpl{:real}  & maximum error expected 
-      for left or right rectangle method of numerical integration 
-      per Equation~\ref{eq:lr-rectangle-max-error} \\ \bottomrule
-  \end{tabular}
-\end{enumspec}
-\end{Verbatim}
+  Our first specification, \ref{spec@1}, was created with the following \latex:\\
+  \includegraphics[scale=.6]{fig/s1_listing.eps}\\
 Each specification is essentially an \verb|item| (see line 2) in an \verb|enumspec| environment, 
 (see lines~1 and 14) which 
 is defined in the file \path|seamless.sty| and is an extension of the \verb|enumerate| 
@@ -256,38 +241,8 @@ true
   \end{chapelexample}
 
   \begin{seamlessnote}
-    The above test is inserted with the following \latex code:
-    \begin{Verbatim}[numbers=left]
-\begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
-  A test for function \chpl{leftRectangleIntegration}.
-  \begin{chapelpre}
-  \end{chapelpre}
-  \begin{chapel}
-use leftRightRectangleMaxErr;
-use leftRectangleIntegration;
-
-proc f(x:real):real {
-  return x**3;
-} 
-
-var calculated:real;
-var exact:real = 0.25;
-var maximumError:real = leftRightRectangleMaxErr(
-  a = 0.0, b = 1.0, N = 100, f = f);
-var verified:bool;
-
-calculated = leftRectangleIntegration(
-  a = 0.0, b = 1.0, N = 100, f = f);
-verified = (abs(calculated - exact) <= maximumError);
-writeln(verified);
-  \end{chapel}
-  \begin{chapelpost}
-  \end{chapelpost}
-  \begin{chapeloutput}
-true
-  \end{chapeloutput}
- \end{chapelexample}
-\end{Verbatim}
+    The above test is inserted with the following \latex code: \\
+    \includegraphics[scale=.6]{fig/s2_listing.eps}\\
     Tests are inserted within \verb|chapelexample| environments (see lines~1 and~29). The option
     passed to the environment is the filename for the test. Each test is given a unique filename.
     The text following the \verb|\begin{chapelexample}| command is printed in the PDF, but is 
@@ -372,24 +327,8 @@ proc leftRectangleIntegration(a: real, b: real, N: int, f): real{
   \end{chapelsource}
 
   \begin{seamlessnote}
-    Our first chunk of source code is inserted with the following \latex source:
-    \begin{Verbatim}[numbers=left,gobble=6]
-      \begin{chapelsource}{leftRectangleIntegration.chpl}
-        \begin{chapel}
-          proc leftRectangleIntegration(
-            a: real, b: real, N: int, f): real{
-            var h: real = (b - a)/N; 
-            var sum: real = 0.0;
-            var x_n: real;
-            for n in 0..N-1 {
-              x_n = a + n * h;
-              sum = sum + f(x_n);
-            }
-            return h * sum;
-          }
-        \end{chapel}
-      \end{chapelsource}
-    \end{Verbatim}
+    Our first chunk of source code is inserted with the following \latex source:\\
+    \includegraphics[scale=.6]{fig/s3_listing.eps}\\
     The source is specified in a \verb|chapel| environment (see lines~2 and~14) within 
     a \verb|chapelsource| environment (see lines~1 and~15). The option passed to the
     \verb|\begin{chapelsource}| command specifies the file in which the source is placed.
@@ -506,15 +445,15 @@ true
 
 \begin{chapelhelper}{testFunctions.chpl}
   \begin{chapel}
-    proc f1(x:real):real {
-      return x**3;
-    } 
-    proc f2(x:real):real {
-      return 1/x;
-    } 
-    proc f3(x:real):real {
-      return x;
-    } 
+proc f1(x:real):real {
+  return x**3;
+} 
+proc f2(x:real):real {
+  return 1/x;
+} 
+proc f3(x:real):real {
+  return x;
+} 
   \end{chapel}
 \end{chapelhelper}
 

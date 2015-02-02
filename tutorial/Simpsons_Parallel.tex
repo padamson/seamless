@@ -1,0 +1,156 @@
+
+\begin{chapelexample}{simpsonsIntegrationParallelTest.chpl}
+  A test for \lstinline{simpsonsIntegrationParallel} using $f(x) = \{x^3, 1/x, x\}$.
+  \begin{chapelpre}
+  \end{chapelpre}
+  \begin{chapel}
+    use simpsonsIntegrationParallel;
+    use testFunctions;
+
+    var exact:real;
+    var calculated:real;
+    var maxErr:real;
+
+    exact = 0.25;
+    maxErr = 0.00001;
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 1.0, N = 100, f = f1);
+    writeln((abs(calculated - exact) <= maxErr));
+
+    exact = 4.605170;
+    maxErr = 0.00001;
+    calculated = simpsonsIntegrationParallel(a = 1.0, b = 100.0, N = 1000, f = f2);
+    writeln((abs(calculated - exact) <= maxErr));
+
+    exact = 12500000;
+    maxErr = 0.00001;
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 5000.0, N = 5000000, f = f3);
+    writeln((abs(calculated - exact) <= maxErr));
+
+    exact = 18000000;
+    maxErr = 0.00001;
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 6000.0, N = 6000000, f = f3);
+    writeln((abs(calculated - exact) <= maxErr));
+  \end{chapel}
+  \begin{chapelpost}
+  \end{chapelpost}
+  \begin{chapeloutput}
+true
+true
+true
+true
+  \end{chapeloutput}
+\end{chapelexample}
+
+\begin{chapelsource}{simpsonsIntegrationParallel.chpl}
+  \begin{chapel}
+    proc simpsonsIntegrationParallel(a: real(64), b: real(64), N: int(64), f): real{
+      var h: real(64) = (b - a)/N; 
+      var sum1$, sum2$: sync real = 0.0;
+      var x_n1$, x_n2$: sync real;
+      cobegin {
+        for n1 in 1..N-1 by 2 {
+          x_n1$ = a + n1 * h;
+          sum1$ = sum1$ + 4.0 * f(x_n1$);
+        }
+        for n2 in 2..N-2 by 2 {
+          x_n2$ = a + n2 * h;
+          sum2$ = sum2$ + 2.0 * f(x_n2$);
+        }
+      }
+      return (h/3.0) * (f(a) + sum1$ + sum2$ + f(b));
+    }
+  \end{chapel}
+\end{chapelsource}
+
+\begin{TODO}
+  Fix chapel\_listing.tex to handle \$ characters for sync variables.
+\end{TODO}
+
+\begin{chapelexample}{simpsonsIntegrationParallelTestWithTiming.chpl}
+  A test for \lstinline{simpsonsIntegration} and \lstinline{simpsonsIntegrationParallel} 
+  using $f(x) = \{x^3, 1/x, x\}$ comparing timing of the parallel and serial methods.
+  \begin{chapelpre}
+  \end{chapelpre}
+  \begin{chapel}
+    use simpsonsIntegrationParallel;
+    use simpsonsIntegration;
+    use testFunctions;
+    use Time;
+
+    var exact:real;
+    var calculated:real;
+    var maxErr:real;
+    var timer, timerP:Timer;
+    var timerMargin: real = 0.6;
+
+    exact = 0.25;
+    maxErr = 0.00001;
+    timerP.start();
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 1.0, N = 100, f = f1);
+    timerP.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    timer.start();
+    calculated = simpsonsIntegration(a = 0.0, b = 1.0, N = 100, f = f1);
+    timer.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    writeln((timerP.elapsed() < timerMargin*timer.elapsed()));
+
+    exact = 4.605170;
+    maxErr = 0.00001;
+    timerP.clear();
+    timerP.start();
+    calculated = simpsonsIntegrationParallel(a = 1.0, b = 100.0, N = 1000, f = f2);
+    timerP.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    timer.clear();
+    timer.start();
+    calculated = simpsonsIntegration(a = 1.0, b = 100.0, N = 1000, f = f2);
+    timer.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    writeln((timerP.elapsed() < 0.5*timer.elapsed()));
+
+    exact = 12500000;
+    maxErr = 0.00001;
+    timerP.clear();
+    timerP.start();
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 5000.0, N = 5000000, f = f3);
+    timerP.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    timer.clear();
+    timer.start();
+    calculated = simpsonsIntegration(a = 0.0, b = 5000.0, N = 5000000, f = f3);
+    timer.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    writeln((timerP.elapsed() < timerMargin*timer.elapsed()));
+
+    exact = 18000000;
+    maxErr = 0.00001;
+    timerP.clear();
+    timerP.start();
+    calculated = simpsonsIntegrationParallel(a = 0.0, b = 6000.0, N = 6000000, f = f3);
+    timerP.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    timer.clear();
+    timer.start();
+    calculated = simpsonsIntegration(a = 0.0, b = 6000.0, N = 6000000, f = f3);
+    timer.stop();
+    writeln((abs(calculated - exact) <= maxErr));
+    writeln((timerP.elapsed() < timerMargin*timer.elapsed()));
+  \end{chapel}
+  \begin{chapelpost}
+  \end{chapelpost}
+  \begin{chapeloutput}
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+  \end{chapeloutput}
+\end{chapelexample}
