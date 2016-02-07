@@ -1,0 +1,124 @@
+\documentclass[10pt,twoside,titlepage]{seamless}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{times}
+\usepackage{fancyvrb}
+%\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage[nottoc]{tocbibind}
+\usepackage{multirow}
+\usepackage{wrapfig,booktabs}
+\usepackage{subcaption}
+%\usepackage{cleveref}
+%\input{chapel_testing}
+\usepackage{seamless}
+
+% chapel code syntax highlighting
+\input{chapel_listing}
+
+%% High section numbers require different number widths
+\usepackage[titles]{tocloft}
+\setlength{\cftchapnumwidth}{1.3em} % Wide enough for a chapter number.
+\setlength{\cftsecnumwidth}{3.2em}  % Same as cftsubsecnumwidth:
+\setlength{\cftsubsecnumwidth}{3.2em} % Wide enough for three digits and two dots.
+%\setlength{\cftsubsubsecnumwidth}{5.4em}
+\setlength{\cftsecindent}{1.3em}    % cftchapnumwidth
+\setlength{\cftsubsecindent}{1.3em} % cftchapnumwidth
+\setlength{\cftsubsubsecindent}{4.5em} % cftchapnumwidth + cftsecnumwidth
+
+%\usepackage{ifpdf}
+%\ifpdf
+%\usepackage[pdftex,
+            %bookmarks,
+            %plainpages=false,
+            %breaklinks,
+            %pdftitle={Test-Driven Development with seamless},
+            %pdfauthor={Paul Adamson},
+            %pdfsubject={seamless package, literate programming, test-driven development}
+           %]{hyperref}
+%\else
+%\usepackage[ps2pdf]{hyperref}
+%\fi
+
+% include custom latex convenience commands
+\input{custom}
+
+\oddsidemargin 0.0in
+\evensidemargin 0.5in
+\textwidth 6in
+\headheight 0.2in
+\topmargin 0in
+\headsep 0.3in
+\textheight 8.5in
+
+\makeindex
+\title{\texttt{seamless} Framework Example}
+
+\author{Paul Adamson\\
+\\
+}
+
+\date{January 1, 2015}
+
+\setcounter{tocdepth}{3}
+
+\begin{document}
+
+\pagestyle{empty}
+%\pagenumbering{alph}
+
+\ifpdf
+\pdfbookmark[1]{Title}{titlepage}
+\fi
+\maketitle
+
+\null\vfill
+\noindent
+\begin{center}
+\copyright Paul Adamson
+\end{center}
+
+\cleardoublepage
+\include{tm}
+\cleardoublepage
+
+\pagestyle{myheadings}
+\markboth{\texttt{seamless} Framework Example}{\texttt{seamless} Framework Example}
+%\pagenumbering{roman}
+
+\ifpdf
+\pdfbookmark[1]{Table of Contents}{tablecontents}
+\fi
+\tableofcontents
+
+\cleardoublepage
+
+\pagestyle{myheadings}
+%\pagenumbering{arabic}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{4mm plus2mm minus1mm}
+
+\input{introduction}
+\cleardoublepage
+\input{notation}
+\cleardoublepage
+\input{organization}
+\cleardoublepage
+\input{requirements}
+\cleardoublepage
+\input{example_section}
+\cleardoublepage
+\appendix
+\input{requirement_traceability}
+\cleardoublepage
+\markboth{\texttt{seamless} Framework Example}{Index}
+\input{seamless_example.ind}\label{index}
+
+\bibliographystyle{plain}       
+\bibliography{references} 
+
+\end{document}

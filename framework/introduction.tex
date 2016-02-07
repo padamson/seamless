@@ -1,0 +1,334 @@
+\sekshun{Introduction}
+\label{Tutorial_Introduction}
+
+Several characteristics of legacy code present challenges to the scientific computing community. 
+These characteristics are symptoms of the fact that, in general, the codes are written by individuals who are 
+scentists or engineers first and computer programmers second. 
+Often times, a code is very poorly documented, and the test suite amounts to a few exaample 
+input decks and expected output decks. The vast majority of modules, procedures, and objects within a code
+will likely not have unit tests associated with them. 
+In addition to basic shortfalls in documentation, there is often a lack of context in the documentation that
+is available.
+Although adaptation patterns can be found in a sizable percentage of recently developed science codes, 
+the traditional scientific software stack lacks adequate abstractions and tools necessary
+to port it to a new execution environment or apply it to a problem set different than what was 
+originally intended.\cite{kang}
+While scientists are incentivized and indeed desire to produce reusable, maintainable code, these deficiencies 
+are roadblocks to that end.\cite{petre} 
+
+\begin{TODO}
+  Add paragraph on overhead of good software engineering. Integration of multiple tools.
+\end{TODO}
+
+The purpose of the \seamless framework for science code development is to provide scientists and engineers
+with some tools to help them produce code that is reusable and maintainable. 
+In the \seamless framework, a test-driven development 
+approach is combined with concepts from literate programming\cite{knuth} and 
+best practices in software engineering. The resulting framework encourages development of very modular, 
+well-documented code that is robust and reusable.  Currently, the framework supports 
+the Chapel~(\url{http://chapel.cray.com}) programming language, but extension to other languages is 
+straightforward.  This extensibility is possible because the framework is designed around the \latex
+typesetting system. When following the \seamless approach, the developer is essentially writing a \latex
+document containing the requirements, documentation, specification, test suite, and source code. Tests and 
+source code are extracted and the tests are run by executing a script that is provided with the framework.
+
+In addition to this introductory chapter, the remainder of the tutorial is an example \seamless 
+specification for a simple software package
+to compute the integral of a one-dimensional function using various numerical integration techniques. 
+More specifically, the tutorial solves the Rosetta Code numerical integration 
+task\cite{rosetta-code-numerical-integration} in Chapel. 
+As you will
+see, the ``off the shelf'' format of a \seamless specification supports colored text boxes to capture
+various aspects of the specification such as \textit{Notes}, \textit{Rationales}, and \textit{Futures}. In addition,
+the tutorial contains an additional type of text box not normally present in a specification to explain 
+background information about the \seamless framework in context of the tutorial. Here is an example of one
+of these special \seamless note text boxes used only in the tutorial:
+\begin{seamlessnote}
+  Example text box used to provide background on the \seamless approach in context of the tutorial.
+\end{seamlessnote}
+\latex source, shell commands, and other computer syntax is placed in the \verb|verbatim| environment 
+and is typeset in a typewriter font.
+Many examples in this tutorial use command-line commands. All command line examples use 
+a Unix-style command line prompt (a dollar sign) with the directory in brackets preceding it, as follows:
+\begin{verbatim}
+[./tutorial/] $ echo 'hello, world!'
+hello, world!
+\end{verbatim}
+But before we get to the example use of \seamless, some background on test-driven development, literate programming,
+and software engineering practices is in order.
+
+\section{Test-Driven Development}
+Test-driven development, or TDD, is the notion that developers will improve both the design and
+accuracy of their code by \textit{writing the test} for a particular feature \textit{before writing the 
+code} that implements the feature according to the specification. In other words, the TDD process 
+begins with writing an automated test for code that does not yet 
+exist. After a test is written for a particular feature defined in the specification, the 
+programmer then writes the implementing code to get the test to pass. This process is repeated until
+all features in the specification are implemented.  
+The idea is that by writing tests before code, rather than after, the tests will help guide
+the design in small, incremental steps. Over time, this creates a well-factored and robust
+codebase that is easier to modify.
+
+\subsection{A Typical TDD Process}\label{tdd-classic}
+
+A typical TDD process goes something like this:
+\begin{enumerate}
+\item Create a test. The test should be short and test for only one code feature. The test
+  should run automatically.
+\item Make sure the test fails. Verifying test failure before writing code helps to ensure
+  that you are indeed testing the intended feature.
+\item Write the simplest code possible to make the test pass. The code doesn't necessarily 
+  need to be `good' yet.  Try not to look ahead too far. Write just enough code to clear 
+  the current error.
+\item Refactor the code. Once the test passes, improve the code through refactoring. 
+  Clean up duplication. Optimize. Perhaps implement some parallelization. Consider creating new abstractions or
+  objects.  Refactoring is a key part of design, so spend an appropriate amount of time on this step.
+\item Retest. Run the tests again to make sure you haven't changed any behavior.
+\item Retest and refactor some more. Do you get the point on refactoring yet?
+\end{enumerate}
+
+Repeat the above cycle until your code is complete. This will, in theory, ensure that your code is
+always as simple as possible and completely covered by tests. 
+
+\subsection{TDD Aids Design}
+Test-driven development aids software design in several ways. Deciding which test to write next forces you
+to think about what functionality you need in your code in a systematic way. Deciding how to test your code for
+a given functionality forces you to think about how that functionality should be implemented, driving you to 
+consider how the rest of the code will interface with it. After the test passes, you refactor and refactor again,
+improving the design of the code in incremental ways. Since you have working unit tests for all of the functionality
+that has been implemented prior to a given refactoring stage, you can feel confident that the improvements you make
+through refactoring will not break another part of the code.
+
+Continual alignment of source code with relevant tests as described above tends to ensure that the resulting 
+software package is made up of small functions and objects that are loosely coupled and have minimal side effects.
+TDD encourages a good code structure with low coupling (different parts of the code have minimal dependencies
+on each other) and high cohesion (code that is in the same unit is all related). Code written without tests will
+tend to have low cohesion and high coupling characteristics, making it much harder to cover with tests
+written after development.
+
+\subsection{Tests as Code Documentation}
+A case can be made in some domains (\eg web development) that automated test suites 
+provide an alternate means of documenting code---that
+the tests are, in essence, a detailed specification of the code's behavior. This is somewhat true in
+technical computing, but full documentation of scientific and engineering software requires 
+more than just brief comments and example output. Surely, documentation for a function that computes 
+the electron-electron repulsion integral in a quantum chemistry code must have some description
+of the type of electronic wavefunction for which the code is valid! 
+
+\section{Literate Programming}
+
+A typical computer program consists of a text file 
+containing program code. Strewn throughout will likely be scant plain text descriptions separated out by 
+``comment delimiters'' that document various aspects of the code.
+Since the actual code itself is presented in a such a way that supports the syntax, ordering, and structure 
+that the programming language (and hence compiler) requires, the code comments will
+be relatively disorganized and disjointed if you are reading them for documentation purposes. 
+The way a code suite is organized in source is generally much different than the way thorough documentation is 
+developed. The plain text nature of the comments also greatly limits their information value.
+
+In literate programming the emphasis is reversed. Instead of writing \textit{a lot of} code that contains 
+\textit{some} plain text documentation, 
+the literate programmer writes \textit{thorough, well-organized, and content-rich} documentation that contains 
+\textit{modular and efficient} code. 
+The result is that the commentary is no longer hidden within a program surrounded by 
+comment delimiters; instead, it is made the main focus. 
+The ``program'' becomes primarily a document directed at humans, with the 
+code interspersed within the documentation, separated out by ``code delimiters'' so that it can be extracted 
+out and processed into source code by literate programming tools. The nature of literate programming is 
+summarized pretty well in a quote from the online documentation for the FunnelWeb literate programming
+preprocessor:
+
+\begin{quote}
+``The effect of this simple shift of emphasis can be so profound as to change one's whole approach to
+programming. Under the literate programming paradigm, the central activity of programming becomes that of 
+conveying meaning to other intelligent beings rather than merely convincing the computer to behave in a 
+particular way. It is the difference between performing and exposing a magic trick.'' 
+\begin{flushright}
+-FunnelWeb Tutorial Manual\cite{funnelweb-what-is-literate-programming}
+\end{flushright}
+\end{quote}
+
+\label{literate-program-requirements}
+The following list of requirements can be used to define a ``literate program:''\cite{childs}
+\begin{enumerate}
+\item The high-level language code and the associated documentation come from the same 
+set of source files.
+\item The documentation and high-level language code for a given aspect of the program should be 
+adjacent to each other when presented to the reader.
+\item The literate program should be subdivided in a logical way.
+\item The program should be presented in an order that is logical from the standpoint of documentation
+rather than to conform to syntactic constraints of the underlying programming language(s).
+\item The documentation should include notes on open issues and future areas for development.
+\item Most importantly, the documentation should include a description of the problem and its solution. 
+This should include all aids such as mathematics and graphics that enhance communication of the problem 
+statement and the understanding of its challenge.
+\item Cross references, indices, and different fonts for text, high-level language keywords, 
+variable names, and literals should be reasonably automatic and obvious in the source and the documentation.
+\item The program is written in small chunks that include the documentation, definitions, and code.
+\end{enumerate}
+
+The documentation portion may be any text that aids the understanding of the problem solved by the code 
+(\eg description of the algorithm that is implemented).  The documentation is often significantly 
+longer than the code itself. Ideally, the problem is described in a way that is agnostic of the language
+in which the code is written.  For example, documentation for code that integrates a function $f(x)$ would
+have discussion of discontinuities, various integration methods available (\eg trapezoidal, Simpson), 
+domain of integration, \etc. 
+In addition to basic shortfalls in documentation and testing in scientific codes, a recent 
+study highlighted the widespread lack of basic context in available documentation.\cite{petre}
+Literate programming solves this problem, ensuring that context is created while the program
+is written.
+
+\section{The \texttt{seamless} Framework}
+Test-driven development and literate programming are certainly compatible.  In fact, they are 
+complementary and their combined use is a rare actual example of ``the whole is greater
+than the sum of its parts,'' especially in the context of developing science code.  
+In one document, we can clearly outline the problem to be solved, develop a test for the 
+code that we want, and document the code that solves the problem. As this is done in an incremental
+manner, the scientist develops the code that solves the right problem in an efficient and robust manner.
+As will be seen below, the process also supports several fundamental aspects of good software
+engineering.
+
+\begin{TODO}
+  Add better overview of \seamless. See intro slides.
+\end{TODO}
+
+\subsection{Writing Good Requirements}\label{good-requirements}
+
+The \seamless framework begins first with writing a high-level requirements specification.
+Failing to write down the requirements is the single biggest unnecessary risk a developer
+can take in a software project, resulting in greatly diminished productivity. 
+For any non-trivial project (more than a few days of coding for one programmer), 
+the lack of a thorough requirements specification will always result in more time spent and lower quality code.
+Even for trivial examples, a short, informal specification will at least help to ensure
+accuracy of the resulting code.
+
+Depending on the size and complexity of the code, the requirements specification can have
+multiple levels (or \textit{layers}). 
+It clearly defines the problem that the program will solve. 
+At some point in development of the requirements specification,
+the developer should evaluate available algorithms and consider how data produced from the 
+program will be used.
+Even if a specification is written solely for the benefit of a lone developer, the act of 
+writing the specification---describing how the program works in 
+detail---will force the developer to begin thinking about design of the program.
+
+\subsection{The Code Development Process Within the \texttt{seamless} Framework}\label{tdd-better}
+Once a high-level requirements specification is in hand, the remainder of the \seamless process is
+used to decompose the requirements, document the solution, write tests, and write source code:
+\begin{enumerate}
+\item Document a part of the problem and its solution.
+  \begin{enumerate}
+  \item Describe a small part of the problem to be solved. The description should include    
+all aids such as mathematics and graphics that enhance communication of the problem 
+statement and the understanding of its challenge. 
+  \item Solve the problem, again using all aids at your disposal (\eg math, graphics).
+  \item Include appropriate references to higher level requirement specifications.
+  \end{enumerate}
+\item Create a test. 
+\begin{enumerate}
+  \item The test should be as short as possible and test for one solution in your overall
+  problem.\footnote{Note here that ``one thing in your code'' is replaced with ``one
+  solution in your overall problem.'' This change emphasizes the literate programming emphasis
+  on documenting the problem and solution before writing code. Writing the test is another
+  form of documenting the solution.}
+  \item The test should run automatically.
+  \item Make sure the test fails. 
+\end{enumerate}
+\item Create the code.
+  \begin{enumerate}
+  \item Write the simplest code possible to pass the test. 
+  \item After the test passes, refactor to improve the code. 
+  \item Run the tests again to make sure the code still passes.
+  \item Refactor and retest some more.
+  \end{enumerate}
+\end{enumerate}
+
+Repeat the above cycle until your code is complete. This process will help to ensure that your code will 
+have the following characteristics:
+\begin{itemize}
+  \item completely documented
+  \item simple
+  \item readable
+  \item completely covered by tests
+  \item robust
+  \item accurate
+  \item maintainable
+  \item reusable
+\end{itemize}
+
+\section{Tutorial Structure}
+
+The following files make up this tutorial for \seamless:
+\begin{description}
+  \item[Makefile] supports \verb|pdflatex| and \verb|latex| to compile the \latex package into the tutorial
+    pdf; also has targets to make source code and tests from the \latex package and run the tests (usage of these
+    targets is described in the tutorial)
+  \item[seamless.cls] provides the \seamless \latex document class which is a modification of the \verb|book| class
+  \item[seamless.sty] provides several environments and commands used in the seamless approach (usage is described
+    in the tutorial)
+  \item[Numerical\_Integration.tex] the main \latex document with includes for the remaining \latex files 
+    (see Chapter~\ref{Organization}, Organization, for details on the structure of the tutorial)
+  \item[chapel\_listing.tex] used with the \latex \verb|listings| package to properly format Chapel code
+  \item[references.bib] contains bibliography entries for use by \verb|bibtex|
+\end{description}
+
+To build the PDF of the tutorial, simply run \verb|make|. The default target in the makefile uses \verb|pdflatex|
+to compile the package:
+\begin{verbatim}
+[./tutorial/] $ make 
+...
+Output written on Numerical_Integration.pdf (43 pages, 306114 bytes).
+Transcript written on Numerical_Integration.log.
+\end{verbatim}
+
+Adapting the associated \latex files for a new software project is straightforward. 
+Once you've adapted the structure of the \latex package in the \path{.\tutorial} directory for your
+purposes, and you've written a decent requirement specification, you're ready to begin the process described in
+Section \ref{tdd-better}. 
+
+\section{\texttt{seamless} Does Not Fully Implement Literate Programming}
+
+The \seamless framework borrows from literate programming, but it is not a full implementation of its
+ideas.  While the approach that I've described meets the intent of the requirements outlined in Section 
+\ref{literate-program-requirements} above, it only fully implement one of the two main concepts of
+literate programming.\cite{knuth}
+The first concept, already described at length, is that code should have good documentation with all of the
+supporting mathematics and graphics necessary to convey its function.
+
+The other main concept of literate programming is that the best order to explain the parts of a program 
+is not necessarily going to be the same order that the compiler needs to process the code. 
+For example, you might have
+
+\begin{chapel}
+proc readInAtoms(filename:string) {
+  var infile = open(filename, iomode.r);
+  var reader = infile.reader();
+
+  // 55 lines of error handling code
+
+  readNuclei(reader);
+  readBasis(reader);
+
+}
+\end{chapel}
+
+When first describing the function of the above block of code, the developer wants to focus on a description of 
+opening the file 
+and reading in data, not discussing the error handling just because the computer language requires it to be in 
+between the open and the read. You probably prefer to discuss the main logic first, returning to the error-handling 
+part at some later point in the documentation, perhaps in a section of the documentation that covers error-handling
+for the entire software package.
+Also, for a collaborator that is reviewing code to understand and perhaps contribute to it, having all of that
+error handling present in the first encounter with the code block is very distracting. It is an impediment to 
+understanding the main purpose of the code.
+
+When you program in a true literate programming system, you 
+get to write code in any order that supports documentation of the code. The literate programming system 
+comes with a utility program, 
+usually called \lstinline{tangle}, which permutes the code into the right order so that you can compile or execute it.
+This aspect of literate programming is not implemented in the \seamless framework. This is a conscious decision 
+that was made in developing the framework in order to allow the 
+TDD approach to drive the order in which test and source code is developed and presented to the
+reviewer.  The compromise allows us to take advantage of many of the characteristics of literate programming while
+executing a TDD process.
+

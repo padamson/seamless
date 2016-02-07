@@ -1,0 +1,25 @@
+% some custom latex convenience commands
+\usepackage{xspace}
+\newcommand*{\eg}{\emph{e.g.}\@\xspace}
+\newcommand*{\ie}{\emph{i.e.}\@\xspace}
+\newcommand*{\seamless}{\lstinline|seamless|\@\xspace}
+\newcommand*{\latex}{\LaTeX\@\xspace}
+
+\makeatletter
+\newcommand*{\etc}{%
+  \@ifnextchar{.}%
+  {etc}%
+  {etc.\@\xspace}%
+}
+\makeatother
+
+\newcommand{\rsec}[1]
+           {\S\ref{#1}}
+
+% courtesy: http://www.iam.ubc.ca/~newbury/tex/page-set-up.html
+\newcommand{\sekshun}[1]
+           {
+             \chapter{#1}
+             \markboth{Test-Driven Development with \texttt{seamless}}{#1}
+           }
+
