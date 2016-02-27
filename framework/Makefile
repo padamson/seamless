@@ -34,7 +34,8 @@ clean:
 	rm -f *.aux *.blg *.bbl *.dvi *.log
 
 clobber: clean
-	rm -f $(SPEC).ps $(SPEC).pdf $(SPEC).ilg $(SPEC).out $(SPEC).toc $(SPEC).idx $(SPEC).ind
+	rm -f $(SPEC).ps $(SPEC).pdf $(SPEC).ilg $(SPEC).out $(SPEC).toc $(SPEC).idx $(SPEC).ind 
+	rm -rf helper/ src/ test/
 
 TESTOPTS=-no-chpl-home-warn -compopts '-M $(SPECHOME)/src -M $(SPECHOME)/helper'
 test: FORCE
