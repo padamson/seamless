@@ -10,7 +10,7 @@
 #  for more info.
 #
 # SUPPORTED ENVIROMENTS:
-# - chapelexample (REQUIRED)
+# - chapeltest (REQUIRED)
 #   If a filename is not given on the first line, the filename is
 #   generated from the input filename and the line number.
 #
@@ -294,10 +294,10 @@ for infile in args:
         lineno += 1
         pos = line.find('\\end{chapel')
         if (line[0].strip() != '%') and pos > -1:
-            pos += 11
-            if line.find('example}', pos) == pos:
+            pos += 11 
+            if line.find('test}', pos) == pos:
                 if options.debug:
-                    sys.stdout.write('>>> Writing out test example: %s\n'%(currTestName))
+                    sys.stdout.write('>>> Writing out test: %s\n'%(currTestName))
                 OutputTest(testlineno, currTestName)
                 currTestName = None
                 ClearLists()
@@ -316,12 +316,12 @@ for infile in args:
             pos += 13
             if options.debug:
                 sys.stdout.write('>>> %s\n'%(line))
-            if (line.find('example}{', pos) == pos):
+            if (line.find('test}{', pos) == pos):
                 testlineno = lineno
-                currTestName = line[pos+9:-2]
+                currTestName = line[pos+6:-2]
                 current = None
                 if options.debug:
-                    sys.stdout.write('>>> Found Chapel test example: %s\n'%(currTestName))
+                    sys.stdout.write('>>> Found Chapel test: %s\n'%(currTestName))
                 continue
 
             if currTestName == None:
@@ -378,7 +378,7 @@ for infile in args:
                     if len(goodName) > 0:
                         current += [' '.join(('%',goodName,'\n'))]
 
-        pos = line.find('\\begin{example}')
+        pos = line.find('\\begin{test}')
         if (line[0].strip() != '%') and pos > -1:
             TotalExamples += 1
 

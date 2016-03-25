@@ -41,74 +41,7 @@
 #
 
 import os, sys
-
-#
-# Helper functions
-#
-
-# Extract the good file name from a source line
-def GetGoodName(line):
-    outfile = line.strip().strip('%').strip().replace('.good', '')
-    if options.debug:
-        sys.stdout.write('>>> %s\n'%(outfile))
-    currTestNames.append(outfile)
-    if currTestNames.count(outfile) > 1:
-        sys.stdout.write("WARNING: Test name '%s' already specified.  Good filename may conflict\n"%(outfile))
-    return outdir+'/'+curdir+'/'+outfile+'.good'
-
-# Helper functions for de-LaTeX-ifying output line
-def RemoveLaTeXFormatting(line, nlrepl):
-    dline = line.replace('\\#', '#')
-    dline = dline.replace('\\&', '&')
-    dline = dline.replace('\\_', '_')
-    dline = dline.replace('\\\\', nlrepl)
-    dline = dline.replace('$\\mbox{{\\bf \\$}}$', '$')
-    dline = dline.replace('(*\\texttt{\\$}*)', '$')
-    return dline
-
-# Helper for writing test files
-def WriteTestFile(fh, output):
-    for line in output:
-        if line[0] != '%':
-            fh.write(RemoveLaTeXFormatting(line, '\\'))
-
-# Helper for writing test .good files
-def WriteGoodFile(fh, output, testName):
-    goodTestName = testName+'.good'
-    opened = False
-    for line in output:
-        if line[0] == '%':
-            # new .good file
-            if opened:
-                fh.close()
-            opened = True
-            goodTestName = GetGoodName(line)
-            if options.debug:
-                sys.stdout.write('>>> Opening %s\n'%(goodTestName))
-            fh = open(goodTestName, 'w')
-        else:
-            if not opened:
-                if options.debug:
-                    sys.stdout.write('>>> Opening %s\n'%(goodTestName))
-                fh = open(goodTestName, 'w')
-                opened = True
-            fh.write(RemoveLaTeXFormatting(line, ''))
-
-    if opened:
-        fh.close()
-
-
-def ClearLists():
-    del chapelpre[:]
-    del chapelcode[:]
-    del chapelpost[:]
-    del chapelfuture[:]
-    del chapelcompopts[:]
-    del chapelexecopts[:]
-    del chapelprediff[:]
-    del chapeloutput[:]
-    del chapelwideoutput[:]
-    del chapelprintoutput[:]
+from extract_tests import GetGoodName, RemoveLaTeXFormatting, WriteTestFile, WriteGoodFile, ClearLists
 
 # Write out the helper files
 def OutputTest(lineno, currTestName):
