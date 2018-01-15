@@ -35,3 +35,8 @@
 /tutorial/slides/intro/*.vrb
 /tutorial/slides/intro/fig/*converted-to.pdf
 
+# python virtualenv ignore
+/seamless_python
+
+# failing tests
+*.exec.out.tmp

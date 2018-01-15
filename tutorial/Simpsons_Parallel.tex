@@ -81,7 +81,7 @@ true
     var calculated:real;
     var maxErr:real;
     var timer, timerP:Timer;
-    var timerMargin: real = 0.6;
+    var timerMargin: real = 1.0;
 
     exact = 0.25;
     maxErr = 0.00001;
@@ -107,7 +107,7 @@ true
     calculated = simpsonsIntegration(a = 1.0, b = 100.0, N = 1000, f = f2);
     timer.stop();
     writeln((abs(calculated - exact) <= maxErr));
-    writeln((timerP.elapsed() < 0.5*timer.elapsed()));
+    writeln((timerP.elapsed() < timerMargin*timer.elapsed()));
 
     exact = 12500000;
     maxErr = 0.00001;
