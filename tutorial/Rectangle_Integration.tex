@@ -210,8 +210,7 @@ and will be written to \path{leftRectangleIntegration.chpl}.
     is met).
   \end{seamlessnote}
 
-  \todo{Rename all chapelexample environments to chapeltest environments.}
-  \begin{chapelexample}{leftRectangleIntegrationTest1.chpl}
+  \begin{chapeltest}{leftRectangleIntegrationTest1.chpl}
     A test for function \chpl{leftRectangleIntegration} using $f(x) = x^3$.
     \begin{chapelpre}
     \end{chapelpre}
@@ -239,15 +238,15 @@ writeln(verified);
     \begin{chapeloutput}
 true
     \end{chapeloutput}
-  \end{chapelexample}
+  \end{chapeltest}
 
   \begin{seamlessnote}
     The above test is inserted with the following \latex code: \\
     \includegraphics[scale=.6]{fig/s2_listing.eps}\\
-    Tests are inserted within \verb|chapelexample| environments (see lines~1 and~29). The option
+    Tests are inserted within \verb|chapeltest| environments (see lines~1 and~29). The option
     passed to the environment is the filename for the test. Each test is given a unique filename.
-    The text following the \verb|\begin{chapelexample}| command is printed in the PDF, but is 
-      discarded when the test is extracted from the \latex source.  Inside the \verb|chapelexample|
+    The text following the \verb|\begin{chapeltest}| command is printed in the PDF, but is 
+      discarded when the test is extracted from the \latex source.  Inside the \verb|chapeltest|
       environment, four other environments are declared: 
       \begin{itemize}
         \item \verb|chapelpre|: code inserted at beginning of the test but not printed in the PDF
@@ -287,11 +286,11 @@ true
     Update test target to run all targets necessary to run tests.
   \end{TODO}
   \begin{TODO}
-    Refactor \verb|chapelexample| environment to \verb|test|.  (Similarly for 
+    Refactor \verb|chapeltest| environment to \verb|test|.  (Similarly for 
       \verb|chapelsource| and \verb|chapelhelper| environments.)
   \end{TODO}
   \begin{TODO}
-    Add option to gobble spaces on left side in \verb|chapelexample| so that code can be
+    Add option to gobble spaces on left side in \verb|chapeltest| so that code can be
     indented in source.
   \end{TODO}
 
@@ -377,7 +376,7 @@ for the left rectangle method is very similar to the first.
   \end{tabular}
 \end{enumspec}
 
-\begin{chapelexample}{leftRectangleIntegrationTest2.chpl}
+\begin{chapeltest}{leftRectangleIntegrationTest2.chpl}
   A test for function \chpl{leftRectangleIntegration} using $f(x) = 1/x$.
   \begin{chapelpre}
   \end{chapelpre}
@@ -402,7 +401,7 @@ writeln(verified);
   \begin{chapeloutput}
 true
   \end{chapeloutput}
-\end{chapelexample}
+\end{chapeltest}
 
 \begin{seamlessnote}
   By now you have likely realized that we already have some opportunities to refactor code in
@@ -470,7 +469,7 @@ proc f3(x:real):real {
   \end{tabular}
   \end{enumspec}
 
-\begin{chapelexample}{leftRectangleIntegrationTest3.chpl}
+\begin{chapeltest}{leftRectangleIntegrationTest3.chpl}
   A test for \chpl{leftRectangleIntegrationWithErr} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
@@ -510,7 +509,7 @@ true
 true
 true
   \end{chapeloutput}
-\end{chapelexample}
+\end{chapeltest}
 
 \begin{enumspec}
 \item\spec{7} Function \chpl{leftRectangleIntegrationWithErr}: 
@@ -566,7 +565,7 @@ proc leftRectangleIntegrationWithErr(
   \end{tabular}
   \end{enumspec}
 
-\begin{chapelexample}{rightRectangleIntegrationTest.chpl}
+\begin{chapeltest}{rightRectangleIntegrationTest.chpl}
   A test for \lstinline{rightRectangleIntegrationWithErr} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
@@ -606,7 +605,7 @@ true
 true
 true
   \end{chapeloutput}
-\end{chapelexample}
+\end{chapeltest}
 
 \begin{enumspec}
 \item\spec{9} Function \chpl{rightRectangleIntegrationWithErr}: 
@@ -696,7 +695,7 @@ The calculated maximum expected error for the tests specified in Requirements~\r
   \end{tabular}
   \end{enumspec}
 
-\begin{chapelexample}{midpointRectangleIntegrationTest.chpl}
+\begin{chapeltest}{midpointRectangleIntegrationTest.chpl}
   A test for \lstinline{midpointRectangleIntegration} using $f(x) \in \{x^3, 1/x, x\}$.
   \begin{chapelpre}
   \end{chapelpre}
@@ -740,7 +739,7 @@ true
 true
 true
   \end{chapeloutput}
-\end{chapelexample}
+\end{chapeltest}
 
 \begin{enumspec}
 \item\spec{11} Function \chpl{midpointRectangleIntegration}: 
