@@ -15,4 +15,4 @@ your LaTeX document when using the seamless approach.
 
 Currently the "usage" of the seamless package is to adapt the tutorial. Future plans
 include a script to generate a blank seamless LaTeX document. I'm open to suggestions
-on how to implement and features that would be useful.
+on how to implement features that would be useful.
