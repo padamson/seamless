@@ -1,5 +1,5 @@
 Seamlessly develop Chapel code. Requirements, documentation, source code, 
-and a test suite are all contained in your LaTeX document. Encourages 
+and test suite are all contained in your LaTeX document. Encourages 
 good software engineering practices, including a test-driven
 development approach.
 
